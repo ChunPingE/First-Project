@@ -10,5 +10,15 @@ import com.example.demo.domain.*;
 public interface BoardMapper {
 
 	@Select("SELECT id, title, writer, inserted FROM Board ORDER BY id DESC")
-	public List<Board> selectAll();
+	List<Board> selectAll();
+
+	@Select("SELECT * FROM Board WHERE id = #{id}")
+	Board selectById(Integer id);
+
+	@Update("UPDATE Board SET title = #{title}, body = #{body}, writer=#{writer} "
+			+ "WHERE id = #{id}")
+	int update(Board board);
+
+	@Delete("DELETE FROM Board WHERE id = #{id}")
+	int deleteById(Integer id);
 }

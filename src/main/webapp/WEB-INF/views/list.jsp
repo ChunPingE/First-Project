@@ -17,7 +17,7 @@
 		<table class="table">
 			<thead>
 				<tr>
-					<th >글번호</th>
+					<th>글번호</th>
 					<th>제목</th>
 					<th>작성자</th>
 					<th>작성일시</th>
@@ -27,17 +27,26 @@
 				<c:forEach items="${boardList}" var="board">
 					<tr>
 						<td>${board.id}</td>
-						<td>${board.title}</td>
+						<td>
+							<a href="/detail/${board.id}">${board.title}</a>
+						</td>
 						<td>${board.writer}</td>
 						<td>
 							<fmt:parseDate value="${board.inserted}" pattern="yyyy-MM-dd'T'HH:mm" var="parsedDateTime" type="both" />
 							<fmt:formatDate value="${parsedDateTime}" pattern="yyyy/MM/dd"/> 
-						</td>
+						</td> 
 					</tr>
 				</c:forEach>
 			</tbody>
 		</table>
 	</div>
+		
+	<c:if test="${success eq 'removeScucess'}" >
+		<script>
+			alert("게시물이 삭제되었습니다.")
+		</script>
+	</c:if>
+	
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
 </body>
 </html>
