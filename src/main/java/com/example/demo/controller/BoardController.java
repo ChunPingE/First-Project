@@ -14,15 +14,15 @@ import com.example.demo.service.*;
 @Controller
 @RequestMapping("/")
 public class BoardController {
-	
+
 	@Autowired
 	private BoardService boardService;
-	
-	//게시물 목록
+
+	// 게시물 목록
 	// 경로 : http://localhost:8080
 	// 경로 : http://localhost:8080/list
-	//@RequestMapping({"/", "list"}, method = RequestMethod.GET)
-	@GetMapping({"/", "list"})
+	// @RequestMapping({"/", "list"}, method = RequestMethod.GET)
+	@GetMapping({ "/", "list" })
 	public String list(Model model) {
 		// 1. request param 수집가공
 		// 2. business logic 처리
@@ -32,9 +32,9 @@ public class BoardController {
 		// 4. fowrard/redirect
 		return "list";
 	}
-	
+
 	@GetMapping("/detail/{id}")
-	public String detail(@PathVariable("id") Integer id,  Model model) {
+	public String detail(@PathVariable("id") Integer id, Model model) {
 		// 1. request param 수집가공
 		// 2. business logic 처리
 		Board board = boardService.getBoard(id);
@@ -43,29 +43,29 @@ public class BoardController {
 		// 4. fowrard/redirect
 		return "detail";
 	}
-	
+
 	@GetMapping("/update/{id}")
 	public String update(@PathVariable("id") Integer id, Model model) {
 		model.addAttribute("board", boardService.getBoard(id));
 		return "update";
 	}
-	
-	//@RequestMapping(value = "/update/{id}", method = RequestMethod.POST)
+
+	// @RequestMapping(value = "/update/{id}", method = RequestMethod.POST)
 	@PostMapping("/update/{id}")
 	public String updateProcess(Board board, RedirectAttributes rttr) {
-		
+
 		boolean ok = boardService.update(board);
 		if (ok) {
-			//해당게시물 보기로 리디렉션
+			// 해당게시물 보기로 리디렉션
 			rttr.addFlashAttribute("success", "modifySuccess");
 			return "redirect:/detail/" + board.getId();
 		} else {
-			//수정폼으로 리디렉션
+			// 수정폼으로 리디렉션
 			rttr.addFlashAttribute("fail", "modifyFail");
 			return "redirect:/update/" + board.getId();
 		}
 	}
-	
+
 	@PostMapping("remove")
 	public String update(Integer id, RedirectAttributes rttr) {
 		boolean ok = boardService.remove(id);
@@ -75,6 +75,28 @@ public class BoardController {
 		} else {
 			rttr.addFlashAttribute("fail", "removeFail");
 			return "redirect:/detail/" + id;
+		}
+	}
+
+	// 인서트 기능 내맘대로 추가
+	// 연습해보기
+	@GetMapping("add")
+	public String addForm(Model model) {
+		//게시물 작성 form(view)로 포워드
+		return "add";
+	}
+	
+	@PostMapping("add")
+	public String addProcess(Board board, RedirectAttributes rttr) {
+		//새 게시물 db에 추가
+		boolean ok = boardService.create(board);
+
+		if (ok) {
+			rttr.addFlashAttribute("success", "insertScucess");
+			return "redirect:/list";
+		} else {
+			rttr.addFlashAttribute("fail", "insertFail");
+			return "redirect:/list";
 		}
 	}
 }

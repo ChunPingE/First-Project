@@ -12,7 +12,12 @@
 </head>
 <body>
 	<div class="container-lg">
-		<h1>게시물 목록 보기</h1>
+		<div>
+			<h1>게시물 목록 보기</h1>
+			<div align="right">
+				<a class="btn btn-secondary" href="/add">글쓰기</a>
+			</div>
+		</div>
 		<!-- table.table>thead>tr>th*4^^tbody -->
 		<table class="table">
 			<thead>
@@ -44,6 +49,18 @@
 	<c:if test="${success eq 'removeScucess'}" >
 		<script>
 			alert("게시물이 삭제되었습니다.")
+		</script>
+	</c:if>
+	
+	<c:if test="${success eq 'insertScucess'}" >
+		<script>
+			alert("게시물이 등록되었습니다.")
+		</script>
+	</c:if>
+	
+	<c:if test="${fail eq 'insertFail'}" >
+		<script>
+			alert("게시물 등록에 실패했습니다.")
 		</script>
 	</c:if>
 	
