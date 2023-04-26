@@ -9,5 +9,4 @@ public class Prj120230425Application {
 	public static void main(String[] args) {
 		SpringApplication.run(Prj120230425Application.class, args);
 	}
-
 }
