@@ -2,6 +2,8 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
+<%@ taglib prefix="my" tagdir="/WEB-INF/tags" %>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -11,12 +13,11 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
 </head>
 <body>
+	<my:navBar current="list"/>
+	
 	<div class="container-lg">
 		<div>
-			<h1>게시물 목록 보기</h1>
-			<div align="right">
-				<a class="btn btn-secondary" href="/add">글쓰기</a>
-			</div>
+			<h1>게시물 목록</h1>
 		</div>
 		<!-- table.table>thead>tr>th*4^^tbody -->
 		<table class="table">
@@ -57,12 +58,7 @@
 			alert("게시물이 등록되었습니다.")
 		</script>
 	</c:if>
-	
-	<c:if test="${fail eq 'insertFail'}" >
-		<script>
-			alert("게시물 등록에 실패했습니다.")
-		</script>
-	</c:if>
+
 	
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
 </body>

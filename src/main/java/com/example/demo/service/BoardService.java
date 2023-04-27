@@ -11,8 +11,12 @@ import com.example.demo.mapper.*;
 public interface BoardService {
 
 	public List<Board> listBoard();
+
 	public Board getBoard(Integer id);
+
 	public boolean update(Board board);
+
 	public boolean remove(Integer id);
+
 	public boolean create(Board board);
 }

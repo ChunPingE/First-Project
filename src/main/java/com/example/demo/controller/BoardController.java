@@ -16,7 +16,7 @@ import com.example.demo.service.*;
 public class BoardController {
 
 	@Autowired
-	private BoardService boardService;
+	private BoardService service;
 
 	// 게시물 목록
 	// 경로 : http://localhost:8080
@@ -26,7 +26,7 @@ public class BoardController {
 	public String list(Model model) {
 		// 1. request param 수집가공
 		// 2. business logic 처리
-		List<Board> list = boardService.listBoard();
+		List<Board> list = service.listBoard();
 		// 3. add attribute
 		model.addAttribute("boardList", list);
 		// 4. fowrard/redirect
@@ -37,7 +37,7 @@ public class BoardController {
 	public String detail(@PathVariable("id") Integer id, Model model) {
 		// 1. request param 수집가공
 		// 2. business logic 처리
-		Board board = boardService.getBoard(id);
+		Board board = service.getBoard(id);
 		// 3. add attribute
 		model.addAttribute("board", board);
 		// 4. fowrard/redirect
@@ -46,7 +46,7 @@ public class BoardController {
 
 	@GetMapping("/update/{id}")
 	public String update(@PathVariable("id") Integer id, Model model) {
-		model.addAttribute("board", boardService.getBoard(id));
+		model.addAttribute("board", service.getBoard(id));
 		return "update";
 	}
 
@@ -54,7 +54,7 @@ public class BoardController {
 	@PostMapping("/update/{id}")
 	public String updateProcess(Board board, RedirectAttributes rttr) {
 
-		boolean ok = boardService.update(board);
+		boolean ok = service.update(board);
 		if (ok) {
 			// 해당게시물 보기로 리디렉션
 			rttr.addFlashAttribute("success", "modifySuccess");
@@ -68,7 +68,7 @@ public class BoardController {
 
 	@PostMapping("remove")
 	public String update(Integer id, RedirectAttributes rttr) {
-		boolean ok = boardService.remove(id);
+		boolean ok = service.remove(id);
 		if (ok) {
 			rttr.addFlashAttribute("success", "removeScucess");
 			return "redirect:/list";
@@ -81,22 +81,24 @@ public class BoardController {
 	// 인서트 기능 내맘대로 추가
 	// 연습해보기
 	@GetMapping("add")
-	public String addForm(Model model) {
-		//게시물 작성 form(view)로 포워드
+	public String addForm() {
+		// 게시물 작성 form(view)로 포워드
 		return "add";
 	}
-	
+
 	@PostMapping("add")
 	public String addProcess(Board board, RedirectAttributes rttr) {
-		//새 게시물 db에 추가
-		boolean ok = boardService.create(board);
+		// 새 게시물 db에 추가
+		boolean ok = service.create(board);
 
 		if (ok) {
 			rttr.addFlashAttribute("success", "insertScucess");
-			return "redirect:/list";
+			// return "redirect:/list";
+			return "redirect:/detail/" + board.getId();
 		} else {
 			rttr.addFlashAttribute("fail", "insertFail");
-			return "redirect:/list";
+			rttr.addFlashAttribute("board", board);
+			return "redirect:/add";
 		}
 	}
 }
