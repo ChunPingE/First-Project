@@ -12,6 +12,10 @@
 </head>
 <body>
 	<my:navBar current="add" />
+	
+	<c:if test="${fail eq 'insertFail'}">
+		<my:alert/>
+	</c:if>
 
 	<div class="container-lg">
 		<div class="row justify-content-center">
@@ -39,11 +43,6 @@
 	</div>
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
 
-	<c:if test="${fail eq 'insertFail'}">
-		<script>
-			alert("게시물 등록에 실패했습니다. 다시입력해주세요")
-		</script>
-	</c:if>
 
 </body>
 </html>
