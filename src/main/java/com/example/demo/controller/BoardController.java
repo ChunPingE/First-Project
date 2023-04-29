@@ -19,16 +19,19 @@ public class BoardController {
 	private BoardService service;
 
 	// 게시물 목록
-	// 경로 : http://localhost:8080
-	// 경로 : http://localhost:8080/list
+	// 경로 : http://localhost:8080?page=3
+	// 경로 : http://localhost:8080/list?page=5
 	// @RequestMapping({"/", "list"}, method = RequestMethod.GET)
 	@GetMapping({ "/", "list" })
-	public String list(Model model) {
+	public String list(Model model, @RequestParam(value = "page", defaultValue = "1") Integer page) {
 		// 1. request param 수집가공
 		// 2. business logic 처리
-		List<Board> list = service.listBoard();
+		// List<Board> list = service.listBoard(); //페이지 처리전
+		Map<String, Object> result = service.listBoard(page); // 페이지 처리후
 		// 3. add attribute
-		model.addAttribute("boardList", list);
+		//model.addAttribute("boardList", result.get("list"));
+		//model.addAttribute("pageInfo", result.get("pageInfo"));
+		model.addAllAttributes(result);
 		// 4. fowrard/redirect
 		return "list";
 	}

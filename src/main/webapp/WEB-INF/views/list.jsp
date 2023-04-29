@@ -36,19 +36,49 @@
 				<c:forEach items="${boardList}" var="board">
 					<tr>
 						<td>${board.id}</td>
-						<td>
-							<a href="/detail/${board.id}">${board.title}</a>
-						</td>
+						<td><a href="/detail/${board.id}">${board.title}</a></td>
 						<td>${board.writer}</td>
-						<td>
-							<fmt:parseDate value="${board.inserted}" pattern="yyyy-MM-dd'T'HH:mm" var="parsedDateTime" type="both" />
-							<fmt:formatDate value="${parsedDateTime}" pattern="yyyy/MM/dd" />
-						</td>
+						<td><fmt:parseDate value="${board.inserted}" pattern="yyyy-MM-dd'T'HH:mm" var="parsedDateTime" type="both" /> <fmt:formatDate value="${parsedDateTime}" pattern="yyyy/MM/dd" /></td>
 					</tr>
 				</c:forEach>
 			</tbody>
 		</table>
 	</div>
+
+	<div class="container-lg">
+		<div class="row">
+			<nav aria-label="Page navigation example">
+				<ul class="pagination justify-content-center">
+
+					<c:if test="${pageInfo.currentPageNumber gt 1}">
+						<li class="page-item">
+							<c:url value="/list" var="pageLink">
+								<c:param name="page" value="${pageInfo.prevPageNumber}"/>
+							</c:url> 
+							<a class="page-link" href="${pageLink}">이전</a>
+						</li>
+					</c:if>
+					
+					<c:forEach begin="${pageInfo.leftPageNumber}" end="${pageInfo.rightPageNumber}" var="pageNum">
+						<c:url value="/list" var="pageLink">
+							<c:param name="page" value="${pageNum}" />
+						</c:url>
+						<li class="page-item"><a class="page-link ${pageNum eq pageInfo.currentPageNumber ? 'active' : '' }" href="${pageLink}">${pageNum}</a></li>
+					</c:forEach>
+					
+					<c:if test="${pageInfo.currentPageNumber lt pageInfo.lastPageNumber}">
+						<li class="page-item">
+							<c:url value="/list" var="pageLink">
+								<c:param name="page" value="${pageInfo.nextPageNumber}"/>
+							</c:url> 
+							<li class="page-item"><a class="page-link" href="${pageLink}">다음</a></li>
+						</li>
+					</c:if>
+				</ul>
+			</nav>
+		</div>
+	</div>
+
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
 </body>
 </html>

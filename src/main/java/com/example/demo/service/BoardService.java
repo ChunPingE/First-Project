@@ -19,4 +19,6 @@ public interface BoardService {
 	public boolean remove(Integer id);
 
 	public boolean create(Board board);
+
+	public Map<String, Object> listBoard(Integer page);
 }

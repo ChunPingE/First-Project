@@ -11,7 +11,13 @@ public interface BoardMapper {
 
 	@Select("SELECT id, title, writer, inserted FROM Board ORDER BY id DESC")
 	List<Board> selectAll();
-
+	
+	@Select("SELECT id, title, writer, inserted FROM Board ORDER BY id DESC LIMIT #{startIndex}, #{rowPerPage}")
+	List<Board> selectAllPaging(Integer startIndex, Integer rowPerPage);
+	
+	@Select("SELECT COUNT(id) count FROM Board")
+	Integer countAll();
+	
 	@Select("SELECT * FROM Board WHERE id = #{id}")
 	Board selectById(Integer id);
 
@@ -26,4 +32,10 @@ public interface BoardMapper {
 			+ "VALUES (#{title}, #{body}, #{writer})")
 	@Options(useGeneratedKeys = true, keyProperty = "id")
 	int insert(Board board);
+
+
+
+	
+
+	
 }
