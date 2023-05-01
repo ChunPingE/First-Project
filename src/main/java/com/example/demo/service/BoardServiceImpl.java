@@ -20,13 +20,13 @@ public class BoardServiceImpl implements BoardService {
 	}
 
 	@Override
-	public Map<String, Object> listBoard(Integer page) {
+	public Map<String, Object> listBoard(Integer page, String search, String type) {
 		Integer rowPerPage = 10;
 		Integer startIndex = (page - 1) * rowPerPage;
 
 		// 페이지 네이션이 필요한 정보
 		// 전체 레코드 수
-		Integer numOfRecords = mapper.countAll();
+		Integer numOfRecords = mapper.countAll(search, type);
 
 		// 마지막 페이지 번호 (총 글개수 - 1) / rowPerPage + 1
 		Integer lastPageNumber = (numOfRecords - 1) / rowPerPage + 1;
@@ -56,7 +56,7 @@ public class BoardServiceImpl implements BoardService {
 		pageInfo.put("nextPageNumber", nextPageNumber);
 
 		// 게시물 목록
-		List<Board> list = mapper.selectAllPaging(startIndex, rowPerPage);
+		List<Board> list = mapper.selectAllPaging(startIndex, rowPerPage, search, type);
 
 		return Map.of("pageInfo", pageInfo, "boardList", list);
 	}

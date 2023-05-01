@@ -23,11 +23,14 @@ public class BoardController {
 	// 경로 : http://localhost:8080/list?page=5
 	// @RequestMapping({"/", "list"}, method = RequestMethod.GET)
 	@GetMapping({ "/", "list" })
-	public String list(Model model, @RequestParam(value = "page", defaultValue = "1") Integer page) {
+	public String list(Model model, 
+			@RequestParam(value = "page", defaultValue = "1") Integer page,
+			@RequestParam(value = "search", defaultValue = "") String search,
+			@RequestParam(value = "type", required = false) String type) {
 		// 1. request param 수집가공
 		// 2. business logic 처리
 		// List<Board> list = service.listBoard(); //페이지 처리전
-		Map<String, Object> result = service.listBoard(page); // 페이지 처리후
+		Map<String, Object> result = service.listBoard(page, search, type); // 페이지 처리후
 		// 3. add attribute
 		//model.addAttribute("boardList", result.get("list"));
 		//model.addAttribute("pageInfo", result.get("pageInfo"));

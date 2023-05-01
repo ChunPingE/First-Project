@@ -12,11 +12,47 @@ public interface BoardMapper {
 	@Select("SELECT id, title, writer, inserted FROM Board ORDER BY id DESC")
 	List<Board> selectAll();
 	
-	@Select("SELECT id, title, writer, inserted FROM Board ORDER BY id DESC LIMIT #{startIndex}, #{rowPerPage}")
-	List<Board> selectAllPaging(Integer startIndex, Integer rowPerPage);
+	@Select("""
+			<script>
+			<bind name="pattern" value="'%' + search + '%'"/>
+			SELECT id, title, writer, body, inserted 
+			FROM Board
+			<where>
+			<if test="type eq 'all' or type eq 'title'">
+			title LIKE #{pattern}
+			</if>
+			<if test="type eq 'all' or type eq 'writer'">
+			OR writer LIKE #{pattern}
+			</if>
+			<if test="type eq 'all' or type eq 'body'">
+			OR body LIKE #{pattern}
+			</if>	
+			</where>
+			ORDER BY id DESC 
+			LIMIT #{startIndex}, #{rowPerPage}
+			</script>
+			""")
+	List<Board> selectAllPaging(Integer startIndex, Integer rowPerPage, String search, String type);
 	
-	@Select("SELECT COUNT(id) count FROM Board")
-	Integer countAll();
+	@Select("""
+			<script>
+			<bind name="pattern" value="'%' + search + '%'"/>
+			SELECT COUNT(id) count 
+			FROM Board
+			<where>
+			<if test="type eq 'all' or type eq 'title'">
+			title LIKE #{pattern}
+			</if>
+			<if test="type eq 'all' or type eq 'writer'">
+			OR writer LIKE #{pattern}
+			</if>
+			<if test="type eq 'all' or type eq 'body'">
+			OR body LIKE #{pattern}
+			</if>	
+			</where>
+			</script>
+			""")
+	Integer countAll(String search, String type);
 	
 	@Select("SELECT * FROM Board WHERE id = #{id}")
 	Board selectById(Integer id);
@@ -32,10 +68,4 @@ public interface BoardMapper {
 			+ "VALUES (#{title}, #{body}, #{writer})")
 	@Options(useGeneratedKeys = true, keyProperty = "id")
 	int insert(Board board);
-
-
-
-	
-
-	
 }

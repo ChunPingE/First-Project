@@ -11,7 +11,7 @@ import com.example.demo.mapper.*;
 public interface BoardService {
 
 	public List<Board> listBoard();
-
+	
 	public Board getBoard(Integer id);
 
 	public boolean update(Board board);
@@ -20,5 +20,5 @@ public interface BoardService {
 
 	public boolean create(Board board);
 
-	public Map<String, Object> listBoard(Integer page);
+	public Map<String, Object> listBoard(Integer page, String search, String type);
 }
