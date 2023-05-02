@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.mapper.BoardMapper">
+	<resultMap type="com.example.demo.domain.Board" id="boardResultMap">
+		<id column="id" property="id" />
+		<result column="title" property="title" />
+		<result column="body" property="body" />
+		<result column="writer" property="writer" />
+		<result column="inserted" property="inserted" />
+		<collection property="fileName" ofType="string">
+			<result column="fileName" />
+		</collection>
+	</resultMap>
+	<!--
+	<select id="selectById" resultMap="boardResultMap">
+		SELECT b.id, b.title, b.body, b.writer, b.inserted, f.fileName FROM Board b
+			LEFT JOIN FileName f ON b.id = f.boardId
+			WHERE b.id = #{id}
+	</select>
+	-->
+	
+	<resultMap type="com.example.demo.domain.BoardView" id="boardViewMap">
+		<id column="id" property="id" />
+		<result column="title" property="title" />
+		<result column="body" property="body" />
+		<result column="writer" property="writer" />
+		<result column="inserted" property="inserted" />
+		<result column="fileCount" property="fileCount"/>
+	</resultMap>
+
+</mapper>

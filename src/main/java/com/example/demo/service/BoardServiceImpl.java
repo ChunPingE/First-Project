@@ -1,9 +1,11 @@
 package com.example.demo.service;
 
+import java.io.*;
 import java.util.*;
 
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.stereotype.*;
+import org.springframework.web.multipart.*;
 
 import com.example.demo.domain.*;
 import com.example.demo.mapper.*;
@@ -18,7 +20,7 @@ public class BoardServiceImpl implements BoardService {
 		List<Board> list = mapper.selectAll();
 		return list;
 	}
-
+	
 	@Override
 	public Map<String, Object> listBoard(Integer page, String search, String type) {
 		Integer rowPerPage = 10;
@@ -56,7 +58,7 @@ public class BoardServiceImpl implements BoardService {
 		pageInfo.put("nextPageNumber", nextPageNumber);
 
 		// 게시물 목록
-		List<Board> list = mapper.selectAllPaging(startIndex, rowPerPage, search, type);
+		List<BoardView> list = mapper.selectAllPaging(startIndex, rowPerPage, search, type);
 
 		return Map.of("pageInfo", pageInfo, "boardList", list);
 	}
@@ -75,8 +77,29 @@ public class BoardServiceImpl implements BoardService {
 		return cnt == 1;
 	}
 
-	public boolean create(Board board) {
+	public boolean create(Board board, MultipartFile[] files) throws Exception {
+		// 게시물 insert
 		int cnt = mapper.insert(board);
+		
+		for (MultipartFile file : files) {
+			if (file.getSize() > 0) {
+				System.out.println(file.getOriginalFilename());
+				System.out.println(file.getSize());
+				// 파일 저장 (파일 시스템 하드디스크에 저장)
+				//폴더만들기
+				String folder = "F:\\study\\upload\\" + board.getId();
+				File targetFolder = new File(folder);
+				if (!targetFolder.exists()) {
+					targetFolder.mkdirs();
+				}
+				//파일 저장
+				String path = folder + File.separator + file.getOriginalFilename();
+				File target = new File(path);
+				file.transferTo(target);
+				// db에 관련정보저장 (insert)
+				mapper.insertFileName(board.getId(), file.getOriginalFilename());
+			}
+		}
 		return cnt == 1;
 	}
 

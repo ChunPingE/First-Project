@@ -4,8 +4,10 @@ import java.util.*;
 
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.stereotype.*;
+import org.springframework.transaction.annotation.*;
 import org.springframework.ui.*;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.*;
 import org.springframework.web.servlet.mvc.support.*;
 
 import com.example.demo.domain.*;
@@ -23,7 +25,7 @@ public class BoardController {
 	// 경로 : http://localhost:8080/list?page=5
 	// @RequestMapping({"/", "list"}, method = RequestMethod.GET)
 	@GetMapping({ "/", "list" })
-	public String list(Model model, 
+	public String list(Model model,
 			@RequestParam(value = "page", defaultValue = "1") Integer page,
 			@RequestParam(value = "search", defaultValue = "") String search,
 			@RequestParam(value = "type", required = false) String type) {
@@ -32,8 +34,8 @@ public class BoardController {
 		// List<Board> list = service.listBoard(); //페이지 처리전
 		Map<String, Object> result = service.listBoard(page, search, type); // 페이지 처리후
 		// 3. add attribute
-		//model.addAttribute("boardList", result.get("list"));
-		//model.addAttribute("pageInfo", result.get("pageInfo"));
+		// model.addAttribute("boardList", result.get("list"));
+		// model.addAttribute("pageInfo", result.get("pageInfo"));
 		model.addAllAttributes(result);
 		// 4. fowrard/redirect
 		return "list";
@@ -46,6 +48,7 @@ public class BoardController {
 		Board board = service.getBoard(id);
 		// 3. add attribute
 		model.addAttribute("board", board);
+		System.out.println(board.getFileName());
 		// 4. fowrard/redirect
 		return "detail";
 	}
@@ -96,20 +99,26 @@ public class BoardController {
 	}
 
 	@PostMapping("add")
-	public String addProcess(Board board, RedirectAttributes rttr) {
+	@Transactional(rollbackFor = Exception.class)
+	public String addProcess(
+			@RequestParam("files") MultipartFile[] files,
+			Board board, RedirectAttributes rttr) {
 		// 새 게시물 db에 추가
-		boolean ok = service.create(board);
-
-		if (ok) {
-			rttr.addFlashAttribute("success", "insertScucess");
-			rttr.addFlashAttribute("message", "게시물이 등록되었습니다.");
-			// return "redirect:/list";
-			return "redirect:/detail/" + board.getId();
-		} else {
-			rttr.addFlashAttribute("fail", "insertFail");
-			rttr.addFlashAttribute("message", "게시물 등록에 실패했습니다. 다시입력해주세요");
-			rttr.addFlashAttribute("board", board);
-			return "redirect:/add";
+		try {
+			boolean ok = service.create(board, files);
+			if (ok) {
+				rttr.addFlashAttribute("success", "insertScucess");
+				rttr.addFlashAttribute("message", "게시물이 등록되었습니다.");
+				// return "redirect:/list";
+				return "redirect:/detail/" + board.getId();
+			} else {
+				rttr.addFlashAttribute("fail", "insertFail");
+				rttr.addFlashAttribute("message", "게시물 등록에 실패했습니다. 다시입력해주세요");
+				rttr.addFlashAttribute("board", board);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
+		return "redirect:/add";
 	}
 }

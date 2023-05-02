@@ -37,7 +37,15 @@
 				<c:forEach items="${boardList}" var="board">
 					<tr>
 						<td>${board.id}</td>
-						<td><a href="/detail/${board.id}">${board.title}</a></td>
+						<td>
+							<a href="/detail/${board.id}">${board.title}</a>
+							<c:if test="${board.fileCount > 0 }">
+								<span class="badge rounded-pill text-bg-info">
+									<i class="fa-sharp fa-solid fa-images"></i>
+									${board.fileCount}
+								</span>
+							</c:if>
+						</td>
 						<td>${board.writer}</td>
 						<td><fmt:parseDate value="${board.inserted}" pattern="yyyy-MM-dd'T'HH:mm" var="parsedDateTime" type="both" /> <fmt:formatDate value="${parsedDateTime}" pattern="yyyy/MM/dd" /></td>
 					</tr>
