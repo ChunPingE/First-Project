@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import java.io.*;
 import java.util.*;
 
 import org.springframework.beans.factory.annotation.*;
@@ -48,7 +49,6 @@ public class BoardController {
 		Board board = service.getBoard(id);
 		// 3. add attribute
 		model.addAttribute("board", board);
-		System.out.println(board.getFileName());
 		// 4. fowrard/redirect
 		return "detail";
 	}
@@ -61,20 +61,27 @@ public class BoardController {
 
 	// @RequestMapping(value = "/update/{id}", method = RequestMethod.POST)
 	@PostMapping("/update/{id}")
-	public String updateProcess(Board board, RedirectAttributes rttr) {
+	public String updateProcess(Board board,
+			@RequestParam(value = "removeFiles", required = false) List<String> removeFileNames,
+			@RequestParam(value = "files", required = false) MultipartFile[] files,
+			RedirectAttributes rttr) {
 
-		boolean ok = service.update(board);
-		if (ok) {
-			// 해당게시물 보기로 리디렉션
-			rttr.addFlashAttribute("success", "modifySuccess");
-			rttr.addFlashAttribute("message", board.getId() + "번 게시물이 수정되었습니다.");
-			return "redirect:/detail/" + board.getId();
-		} else {
-			// 수정폼으로 리디렉션
-			rttr.addFlashAttribute("fail", "modifyFail");
-			rttr.addFlashAttribute("message", "게시물이 수정되지 않았습니다.");
-			return "redirect:/update/" + board.getId();
+		try {
+			boolean ok = service.update(board, removeFileNames, files);
+			if (ok) {
+				// 해당게시물 보기로 리디렉션
+				rttr.addFlashAttribute("success", "modifySuccess");
+				rttr.addFlashAttribute("message", board.getId() + "번 게시물이 수정되었습니다.");
+				return "redirect:/detail/" + board.getId();
+			} else {
+				// 수정폼으로 리디렉션
+				rttr.addFlashAttribute("fail", "modifyFail");
+				rttr.addFlashAttribute("message", "게시물이 수정되지 않았습니다.");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
+		return "redirect:/update/" + board.getId();
 	}
 
 	@PostMapping("remove")
@@ -99,7 +106,6 @@ public class BoardController {
 	}
 
 	@PostMapping("add")
-	@Transactional(rollbackFor = Exception.class)
 	public String addProcess(
 			@RequestParam("files") MultipartFile[] files,
 			Board board, RedirectAttributes rttr) {

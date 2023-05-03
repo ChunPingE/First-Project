@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import java.io.*;
 import java.util.*;
 
 import org.springframework.beans.factory.annotation.*;
@@ -12,10 +13,10 @@ import com.example.demo.mapper.*;
 public interface BoardService {
 
 	public List<Board> listBoard();
-	
+
 	public Board getBoard(Integer id);
 
-	public boolean update(Board board);
+	public boolean update(Board board, List<String> removeFileNames, MultipartFile[] files) throws IllegalStateException, IOException;
 
 	public boolean remove(Integer id);
 

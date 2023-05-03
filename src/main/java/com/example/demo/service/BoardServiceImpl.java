@@ -5,6 +5,7 @@ import java.util.*;
 
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.stereotype.*;
+import org.springframework.transaction.annotation.*;
 import org.springframework.web.multipart.*;
 
 import com.example.demo.domain.*;
@@ -20,7 +21,7 @@ public class BoardServiceImpl implements BoardService {
 		List<Board> list = mapper.selectAll();
 		return list;
 	}
-	
+
 	@Override
 	public Map<String, Object> listBoard(Integer page, String search, String type) {
 		Integer rowPerPage = 10;
@@ -67,32 +68,91 @@ public class BoardServiceImpl implements BoardService {
 		return mapper.selectById(id);
 	}
 
-	public boolean update(Board board) {
+	@Transactional(rollbackFor = Exception.class)
+	public boolean update(Board board, List<String> removeFileNames, MultipartFile[] files)
+			throws IllegalStateException, IOException {
+		if (removeFileNames != null && !removeFileNames.isEmpty()) {
+			for (String fileName : removeFileNames) {
+
+				// 하드 디스크에서 삭제
+				String path = "F:\\study\\upload\\" + board.getId() + File.separator + fileName;
+				File file = new File(path);
+				if (file.exists()) {
+					file.delete();
+				}
+
+				String path2 = "F:\\study\\upload\\" + board.getId();
+				File file2 = new File(path2);
+				if (file2.exists()) {
+					file2.delete();
+				}
+
+				// FileName 테이블의 데이터 삭제
+				mapper.deleteFileNameByBoardIdANndFileName(board.getId(), fileName);
+			}
+		}
+
+		// 게시물(Board) 테이블 수정
 		int cnt = mapper.update(board);
-		return cnt == 1;
-	}
 
-	public boolean remove(Integer id) {
-		int cnt = mapper.deleteById(id);
-		return cnt == 1;
-	}
-
-	public boolean create(Board board, MultipartFile[] files) throws Exception {
-		// 게시물 insert
-		int cnt = mapper.insert(board);
-		
 		for (MultipartFile file : files) {
 			if (file.getSize() > 0) {
-				System.out.println(file.getOriginalFilename());
-				System.out.println(file.getSize());
-				// 파일 저장 (파일 시스템 하드디스크에 저장)
-				//폴더만들기
+				// 폴더만들기
 				String folder = "F:\\study\\upload\\" + board.getId();
 				File targetFolder = new File(folder);
 				if (!targetFolder.exists()) {
 					targetFolder.mkdirs();
 				}
-				//파일 저장
+				// 파일 저장
+				String path = folder + File.separator + file.getOriginalFilename();
+				File target = new File(path);
+				file.transferTo(target);
+				// db에 관련정보저장 (insert)
+				mapper.insertFileName(board.getId(), file.getOriginalFilename());
+			}
+		}
+		return cnt == 1;
+	}
+
+	@Transactional(rollbackFor = Exception.class)
+	public boolean remove(Integer id) {
+		// 파일명 조회
+		List<String> fileNames = mapper.selectFileNamesByBoardId(id);
+
+		// FileName 테이블의 데이터 지우기
+		mapper.deleteFileNameByBoardId(id);
+
+		// 하드디스크의 파일 지우기
+		for (String fileName : fileNames) {
+			String path = "F:\\study\\upload\\" + id + File.separator + fileName;
+			File file = new File(path);
+			if (file.exists()) {
+				file.delete();
+			}
+		}
+
+		// 게시물 테이블의 데이터 지우기
+		int cnt = mapper.deleteById(id);
+		return cnt == 1;
+	}
+
+	@Transactional(rollbackFor = Exception.class)
+	public boolean create(Board board, MultipartFile[] files) throws Exception {
+		// 게시물 insert
+		int cnt = mapper.insert(board);
+
+		for (MultipartFile file : files) {
+			if (file.getSize() > 0) {
+				// System.out.println(file.getOriginalFilename());
+				// System.out.println(file.getSize());
+				// 파일 저장 (파일 시스템 하드디스크에 저장)
+				// 폴더만들기
+				String folder = "F:\\study\\upload\\" + board.getId();
+				File targetFolder = new File(folder);
+				if (!targetFolder.exists()) {
+					targetFolder.mkdirs();
+				}
+				// 파일 저장
 				String path = folder + File.separator + file.getOriginalFilename();
 				File target = new File(path);
 				file.transferTo(target);

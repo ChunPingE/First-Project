@@ -45,7 +45,8 @@
 							<div>
 								<%-- http://localhost:8080/image/4122/slamdunk.jfif --%>
 								<%-- http://localhost:8080/image/게시물번호/fileName --%>
-								<img class="img-thumbnail img-fluid " src="http://localhost:8080/image/${board.id }/${fileName}" alt="" />
+								<c:set var="bucketUrl" value="https://bucket0503-980105chunpinge.s3.ap-northeast-2.amazonaws.com/board"/>
+								<img class="img-thumbnail img-fluid " src="${bucketUrl}/${board.id }/${fileName}" alt="" />
 							</div>
 						</c:forEach>
 					</div>
@@ -54,14 +55,17 @@
 						<label for="" class="form-label">본문</label>
 						<textarea rows="10" name="body" class="form-control">${board.body}</textarea>
 					</div>
+					
 					<div class="mb-3">
 						<label for="" class="form-label">작성자</label>
 						<input type="text" class="form-control" value="${board.writer }" readonly />
 					</div>
+					
 					<div class="mb-3">
 						<label for="" class="form-label">작성일시</label>
 						<input type="text" readonly class="form-control" value="${board.inserted }" />
 					</div>
+					
 					<div>
 						<a class="btn btn-secondary" href="/update/${board.id}">수정</a>
 						<button id="removeButton" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteConfirmModal" >삭제</button>
