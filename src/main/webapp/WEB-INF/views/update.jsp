@@ -33,7 +33,7 @@
 						<label for="titleInput" class="form-label">제목</label>
 						<input type="text" id="titleInput" class="form-control" name="title" value="${board.title }" />
 					</div>
-					
+
 					<!-- 그림 파일 출력 -->
 					<div class="mb-3">
 						<c:forEach items="${board.fileName }" var="fileName" varStatus="st">
@@ -44,31 +44,32 @@
 								</label>
 							</div>
 							<div class="mb-3">
-								<img class="img-thumbnail img-fluid " src="http://localhost:8080/image/${board.id }/${fileName}" alt="" />
+								<c:set var="bucketUrl" value="https://bucket0503-980105chunpinge.s3.ap-northeast-2.amazonaws.com/board" />
+								<img class="img-thumbnail img-fluid " src="${bucketUrl}/${board.id }/${fileName}" alt="" />
 							</div>
 						</c:forEach>
 					</div>
-					
+
 					<div class="mb-3">
 						<label for="bodyInput" class="form-label">본문</label>
 						<textarea rows="10" name="body" id="bodyInput" class="form-control">${board.body }</textarea>
 					</div>
-					
+
 					<div class="mb-3">
 						<label for="writerInput" class="form-label">작성자</label>
 						<input type="text" id="writerInput" name="writer" class="form-control" value="${board.writer}" />
 					</div>
-					
+
 					<div class="mb-3">
 						<label for="writerInput" class="form-label">작성일시</label>
 						<input type="text" name="inserted" class="form-control" value="${board.inserted }" readonly />
 					</div>
-					
+
 					<div class="mb-3">
 						<label for="formFile" class="form-label">첨부 파일</label>
 						<input class="form-control" name="files" type="file" id="formFile" accept="image/*" multiple>
 					</div>
-					
+
 					<div class="mb-3">
 						<input class="btn btn-secondary" type="submit" value="수정" />
 						<a class="btn btn-secondary" href="/list">목록으로가기</a>
