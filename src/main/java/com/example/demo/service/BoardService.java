@@ -16,7 +16,7 @@ public interface BoardService {
 
 	public Board getBoard(Integer id);
 
-	public boolean update(Board board, List<String> removeFileNames, MultipartFile[] files) throws IllegalStateException, IOException;
+	public boolean update(Board board, List<String> removeFileNames, MultipartFile[] files) throws Exception;
 
 	public boolean remove(Integer id);
 

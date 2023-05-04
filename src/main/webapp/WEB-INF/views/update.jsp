@@ -44,7 +44,6 @@
 								</label>
 							</div>
 							<div class="mb-3">
-								<c:set var="bucketUrl" value="https://bucket0503-980105chunpinge.s3.ap-northeast-2.amazonaws.com/board" />
 								<img class="img-thumbnail img-fluid " src="${bucketUrl}/${board.id }/${fileName}" alt="" />
 							</div>
 						</c:forEach>
@@ -68,6 +67,9 @@
 					<div class="mb-3">
 						<label for="formFile" class="form-label">첨부 파일</label>
 						<input class="form-control" name="files" type="file" id="formFile" accept="image/*" multiple>
+						<div class="form-text">
+							총 10MB, 하나의 파일을 1MB를 초과할 수 없습니다.
+						</div>
 					</div>
 
 					<div class="mb-3">

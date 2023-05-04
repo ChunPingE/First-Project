@@ -80,18 +80,20 @@ public class BoardServiceImpl implements BoardService {
 
 	@Transactional(rollbackFor = Exception.class)
 	public boolean update(Board board, List<String> removeFileNames, MultipartFile[] files)
-			throws IllegalStateException, IOException {
+			throws Exception {
 		if (removeFileNames != null && !removeFileNames.isEmpty()) {
 			for (String fileName : removeFileNames) {
 				// 파일 삭제
-				String key = "board/" + board.getId() + "/" + fileName;
+				String objectKey = "board/" + board.getId() + "/" + fileName;
 				DeleteObjectRequest dor = DeleteObjectRequest.builder()
 						.bucket(bucketName)
-						.key(key)
+						.key(objectKey)
 						.build();
 
 				s3.deleteObject(dor);
 
+				// FileName 테이블의 데이터 삭제
+				mapper.deleteFileNameByBoardIdANndFileName(board.getId(), fileName);
 				/*
 				 * // 하드 디스크에서 삭제 String path = "F:\\study\\upload\\" + board.getId() +
 				 * File.separator + fileName; File file = new File(path); if (file.exists()) {
@@ -100,8 +102,6 @@ public class BoardServiceImpl implements BoardService {
 				 * String path2 = "F:\\study\\upload\\" + board.getId(); File file2 = new
 				 * File(path2); if (file2.exists()) { file2.delete(); }
 				 */
-				// FileName 테이블의 데이터 삭제
-				mapper.deleteFileNameByBoardIdANndFileName(board.getId(), fileName);
 			}
 		}
 
@@ -110,24 +110,25 @@ public class BoardServiceImpl implements BoardService {
 
 		for (MultipartFile file : files) {
 			if (file.getSize() > 0) {
-				// 폴더만들기
 				/*
-				 * String folder = "F:\\study\\upload\\" + board.getId(); File targetFolder =
-				 * new File(folder); if (!targetFolder.exists()) { targetFolder.mkdirs(); } //
-				 * 파일 저장 String path = folder + File.separator + file.getOriginalFilename();
-				 * File target = new File(path); file.transferTo(target);
+				 * // 폴더만들기 String folder = "F:\\study\\upload\\" + board.getId(); File
+				 * targetFolder = new File(folder); if (!targetFolder.exists()) {
+				 * targetFolder.mkdirs(); } // 파일 저장 String path = folder + File.separator +
+				 * file.getOriginalFilename(); File target = new File(path);
+				 * file.transferTo(target);
 				 */
-				String key = "board/" + board.getId() + "/" + file.getOriginalFilename();
+				String objectKey = "board/" + board.getId() + "/" + file.getOriginalFilename();
 
-				// s3에 파일 업로드
+				// s3에 파일(객체) 업로드
 				PutObjectRequest por = PutObjectRequest.builder()
 						.bucket(bucketName)
 						.acl(ObjectCannedACL.PUBLIC_READ)
-						.key(key)
+						.key(objectKey)
 						.build();
+				RequestBody rb = RequestBody.fromInputStream(file.getInputStream(), file.getSize());
 
-				s3.putObject(por, RequestBody.fromInputStream(file.getInputStream(), file.getSize()));
-				
+				s3.putObject(por, rb);
+
 				// db에 관련정보저장 (insert)
 				mapper.insertFileName(board.getId(), file.getOriginalFilename());
 			}
@@ -150,10 +151,10 @@ public class BoardServiceImpl implements BoardService {
 			 * String path = "F:\\study\\upload\\" + id + File.separator + fileName; File
 			 * file = new File(path); if (file.exists()) { file.delete(); }
 			 */
-			String key = "board/" + id + "/" + fileName;
+			String objectKey = "board/" + id + "/" + fileName;
 			DeleteObjectRequest dor = DeleteObjectRequest.builder()
 					.bucket(bucketName)
-					.key(key)
+					.key(objectKey)
 					.build();
 
 			s3.deleteObject(dor);
@@ -182,16 +183,17 @@ public class BoardServiceImpl implements BoardService {
 				 * File target = new File(path); file.transferTo(target);
 				 */
 
-				String key = "board/" + board.getId() + "/" + file.getOriginalFilename();
+				String objectKey = "board/" + board.getId() + "/" + file.getOriginalFilename();
 
 				// s3에 파일 업로드
 				PutObjectRequest por = PutObjectRequest.builder()
 						.bucket(bucketName)
 						.acl(ObjectCannedACL.PUBLIC_READ)
-						.key(key)
+						.key(objectKey)
 						.build();
+				RequestBody rb = RequestBody.fromInputStream(file.getInputStream(), file.getSize());
 
-				s3.putObject(por, RequestBody.fromInputStream(file.getInputStream(), file.getSize()));
+				s3.putObject(por, rb);
 
 				// db에 관련정보저장 (insert)
 				mapper.insertFileName(board.getId(), file.getOriginalFilename());
