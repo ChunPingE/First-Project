@@ -14,19 +14,7 @@
 <body>
 	<my:navBar />
 
-	<c:if test="${success eq 'modifySuccess'}">
-		<my:alert />
-	</c:if>
-
-	<c:if test="${success eq 'insertScucess'}">
-		<my:alert />
-	</c:if>
-
-	<c:if test="${fail eq 'removeFail'}">
-		<script>
-			alert("게시물이 삭제되지 않았습니다.")
-		</script>
-	</c:if>
+	<my:alert />
 
 	<div class="container-lg">
 		<!-- .row.justify-content-center>.col-12.col-md-8.col-lg-6 -->

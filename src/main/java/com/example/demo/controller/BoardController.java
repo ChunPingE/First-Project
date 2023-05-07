@@ -70,12 +70,10 @@ public class BoardController {
 			boolean ok = service.update(board, removeFileNames, files);
 			if (ok) {
 				// 해당게시물 보기로 리디렉션
-				rttr.addFlashAttribute("success", "modifySuccess");
 				rttr.addFlashAttribute("message", board.getId() + "번 게시물이 수정되었습니다.");
 				return "redirect:/detail/" + board.getId();
 			} else {
 				// 수정폼으로 리디렉션
-				rttr.addFlashAttribute("fail", "modifyFail");
 				rttr.addFlashAttribute("message", "게시물이 수정되지 않았습니다.");
 			}
 		} catch (Exception e) {
@@ -88,11 +86,10 @@ public class BoardController {
 	public String update(Integer id, RedirectAttributes rttr) {
 		boolean ok = service.remove(id);
 		if (ok) {
-			rttr.addFlashAttribute("success", "removeSucess");
 			rttr.addFlashAttribute("message", id + "번 게시물이 삭제되었습니다.");
 			return "redirect:/list";
 		} else {
-			rttr.addFlashAttribute("fail", "removeFail");
+			rttr.addFlashAttribute("message", "게시물이 삭제되지 않았습니다.");
 			return "redirect:/detail/" + id;
 		}
 	}
@@ -113,12 +110,10 @@ public class BoardController {
 		try {
 			boolean ok = service.create(board, files);
 			if (ok) {
-				rttr.addFlashAttribute("success", "insertScucess");
 				rttr.addFlashAttribute("message", "게시물이 등록되었습니다.");
 				// return "redirect:/list";
 				return "redirect:/detail/" + board.getId();
 			} else {
-				rttr.addFlashAttribute("fail", "insertFail");
 				rttr.addFlashAttribute("message", "게시물 등록에 실패했습니다. 다시입력해주세요");
 				rttr.addFlashAttribute("board", board);
 			}

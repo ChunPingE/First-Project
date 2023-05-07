@@ -19,9 +19,7 @@
 <body>
 	<my:navBar />
 
-	<c:if test="${fail eq 'modifyFail'}">
-		<my:alert />
-	</c:if>
+	<my:alert />
 
 	<div class="container-lg">
 		<div class="row justify-content-center">
@@ -67,9 +65,7 @@
 					<div class="mb-3">
 						<label for="formFile" class="form-label">첨부 파일</label>
 						<input class="form-control" name="files" type="file" id="formFile" accept="image/*" multiple>
-						<div class="form-text">
-							총 10MB, 하나의 파일을 1MB를 초과할 수 없습니다.
-						</div>
+						<div class="form-text">총 10MB, 하나의 파일을 1MB를 초과할 수 없습니다.</div>
 					</div>
 
 					<div class="mb-3">
