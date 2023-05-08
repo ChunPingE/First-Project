@@ -19,6 +19,12 @@
 	</properties>
 	<dependencies>
 		
+		<!-- security tag library -->
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+		    <artifactId>spring-security-taglibs</artifactId>
+		</dependency>
+		
 		<!-- aws s3 -->
 		<dependency>
 			<groupId>software.amazon.awssdk</groupId>
@@ -98,6 +104,15 @@
 	        <version>2.3.1</version>
         	<scope>provided</scope>
 	    </dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-test</artifactId>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 
 	<build>

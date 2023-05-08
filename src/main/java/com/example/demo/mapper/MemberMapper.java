@@ -23,5 +23,23 @@ public interface MemberMapper {
 	@Select("""
 			SELECT * FROM Member WHERE id = #{id}
 			""")
-	Member getMember(String id);
+	Member selectById(String id);
+
+	@Delete("""
+			DELETE FROM Member WHERE id = #{id}
+			""")
+	int deleteById(String id);
+
+	@Update("""
+			<script>
+			UPDATE Member SET
+			<if test="password neq null and password neq ''">
+			password = #{password},
+			</if>
+			nickName = #{nickName},
+			email = #{email}
+			WHERE id = #{id}
+			</script>
+			""")
+	int update(Member member);
 }

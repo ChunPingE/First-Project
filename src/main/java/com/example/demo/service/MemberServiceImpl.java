@@ -3,6 +3,7 @@ package com.example.demo.service;
 import java.util.*;
 
 import org.springframework.beans.factory.annotation.*;
+import org.springframework.security.crypto.password.*;
 import org.springframework.stereotype.*;
 import org.springframework.transaction.annotation.*;
 
@@ -15,9 +16,16 @@ public class MemberServiceImpl implements MemberService {
 
 	@Autowired
 	MemberMapper mapper;
+	
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 
 	@Override
 	public boolean signUp(Member member) {
+		//암호를 암호화
+		String plain = member.getPassword();
+		member.setPassword(passwordEncoder.encode(plain));
+		
 		int cnt = mapper.createMember(member);
 
 		return cnt == 1;
@@ -31,8 +39,39 @@ public class MemberServiceImpl implements MemberService {
 
 	@Override
 	public Member getInfo(String id) {
-		Member member = mapper.getMember(id);
+		Member member = mapper.selectById(id);
 
 		return member;
+	}
+
+	@Override
+	public boolean remove(Member member) {
+		Member dbMember = mapper.selectById(member.getId());
+		int cnt = 0;
+		//dbMember.getPassword().equals(member.getPassword()
+		if (passwordEncoder.matches(member.getPassword(), dbMember.getPassword())) {
+			// 암호가 같으면?
+			cnt = mapper.deleteById(member.getId());
+		}
+		return cnt == 1;
+	}
+
+	@Override
+	public boolean modify(Member member, String inputPassword) {
+		int cnt = 0;
+		
+		//패스워드를 바꾸기 입력했다면
+		if (!member.getPassword().isBlank()) {
+			//입력된 패스워드를 암호화
+			String plain = member.getPassword();
+			member.setPassword(passwordEncoder.encode(plain));
+		}
+		
+		Member dbMember = mapper.selectById(member.getId());
+		if (passwordEncoder.matches(inputPassword, dbMember.getPassword())) {
+			// 암호가 같으면?
+			cnt = mapper.update(member);
+		}
+		return cnt == 1;
 	}
 }

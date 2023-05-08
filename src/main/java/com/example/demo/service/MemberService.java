@@ -10,4 +10,8 @@ public interface MemberService {
 	List<Member> listMember();
 
 	Member getInfo(String id);
+
+	boolean remove(Member member);
+
+	boolean modify(Member member, String inputPassword);
 }
