@@ -1,11 +1,11 @@
 package com.example.demo.controller;
 
-import java.io.*;
 import java.util.*;
 
 import org.springframework.beans.factory.annotation.*;
+import org.springframework.security.access.prepost.*;
+import org.springframework.security.core.*;
 import org.springframework.stereotype.*;
-import org.springframework.transaction.annotation.*;
 import org.springframework.ui.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.*;
@@ -54,6 +54,7 @@ public class BoardController {
 	}
 
 	@GetMapping("/update/{id}")
+	@PreAuthorize("isAuthenticated() and @customSecurityChecker.checkBoardWriter(authentication, #id)")
 	public String update(@PathVariable("id") Integer id, Model model) {
 		model.addAttribute("board", service.getBoard(id));
 		return "update";
@@ -61,11 +62,12 @@ public class BoardController {
 
 	// @RequestMapping(value = "/update/{id}", method = RequestMethod.POST)
 	@PostMapping("/update/{id}")
+	@PreAuthorize("isAuthenticated() and @customSecurityChecker.checkBoardWriter(authentication, #board.id)")
+	//수정하려는 게시물 id : board.id를 전달하던지 board를 전달
 	public String updateProcess(Board board,
 			@RequestParam(value = "removeFiles", required = false) List<String> removeFileNames,
 			@RequestParam(value = "files", required = false) MultipartFile[] files,
 			RedirectAttributes rttr) {
-
 		try {
 			boolean ok = service.update(board, removeFileNames, files);
 			if (ok) {
@@ -83,6 +85,7 @@ public class BoardController {
 	}
 
 	@PostMapping("remove")
+	@PreAuthorize("isAuthenticated() and @customSecurityChecker.checkBoardWriter(authentication, #id)")
 	public String update(Integer id, RedirectAttributes rttr) {
 		boolean ok = service.remove(id);
 		if (ok) {
@@ -97,17 +100,22 @@ public class BoardController {
 	// 인서트 기능 내맘대로 추가
 	// 연습해보기
 	@GetMapping("add")
+	@PreAuthorize("isAuthenticated()")
 	public String addForm() {
 		// 게시물 작성 form(view)로 포워드
 		return "add";
 	}
 
 	@PostMapping("add")
+	@PreAuthorize("isAuthenticated()")
 	public String addProcess(
 			@RequestParam("files") MultipartFile[] files,
-			Board board, RedirectAttributes rttr) {
+			Board board,
+			RedirectAttributes rttr,
+			Authentication authentication) {
 		// 새 게시물 db에 추가
 		try {
+			board.setWriter(authentication.getName());
 			boolean ok = service.create(board, files);
 			if (ok) {
 				rttr.addFlashAttribute("message", "게시물이 등록되었습니다.");

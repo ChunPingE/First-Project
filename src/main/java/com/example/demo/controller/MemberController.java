@@ -3,6 +3,7 @@ package com.example.demo.controller;
 import java.util.*;
 
 import org.springframework.beans.factory.annotation.*;
+import org.springframework.security.access.prepost.*;
 import org.springframework.stereotype.*;
 import org.springframework.ui.*;
 import org.springframework.web.bind.annotation.*;
@@ -21,10 +22,16 @@ public class MemberController {
 	private MemberService service;
 
 	@GetMapping("signup")
+	@PreAuthorize("isAnonymous()")
 	public void signupForm() {
 	}
 
+	@GetMapping("login")
+	public void loginForm() {
+	}
+
 	@PostMapping("signup")
+	@PreAuthorize("isAnonymous()")
 	public String signupProcess(Member member, RedirectAttributes rttr) {
 
 		try {
@@ -47,11 +54,13 @@ public class MemberController {
 
 	// 경로: /member/info?id=
 	@GetMapping("info")
+	@PreAuthorize("isAuthenticated()")
 	public void memberList(String id, Model model) {
 		Member member = service.getInfo(id);
 		model.addAttribute("member", member);
 	}
-
+	
+	@PreAuthorize("isAuthenticated()")
 	@PostMapping("remove")
 	public String remove(Member member, RedirectAttributes rttr) {
 		boolean ok = service.remove(member);
@@ -65,15 +74,17 @@ public class MemberController {
 	}
 
 	@GetMapping("update")
+	@PreAuthorize("isAuthenticated()")
 	public void updateForm(String id, Model model) {
 		Member member = service.getInfo(id);
 		model.addAttribute("member", member);
 	}
-
+	
 	@PostMapping("update")
-	public String updatePorc(Member member, String inputPassword,RedirectAttributes rttr) {
+	@PreAuthorize("isAuthenticated()")
+	public String updatePorc(Member member, String inputPassword, RedirectAttributes rttr) {
 		boolean ok = service.modify(member, inputPassword);
-		
+
 		if (ok) {
 			rttr.addFlashAttribute("message", "회원 정보가 수정되었습니다");
 			return "redirect:/member/info?id=" + member.getId();

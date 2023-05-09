@@ -93,7 +93,7 @@ public class BoardServiceImpl implements BoardService {
 				s3.deleteObject(dor);
 
 				// FileName 테이블의 데이터 삭제
-				mapper.deleteFileNameByBoardIdANndFileName(board.getId(), fileName);
+				mapper.deleteFileNameByBoardIdAndFileName(board.getId(), fileName);
 				/*
 				 * // 하드 디스크에서 삭제 String path = "F:\\study\\upload\\" + board.getId() +
 				 * File.separator + fileName; File file = new File(path); if (file.exists()) {

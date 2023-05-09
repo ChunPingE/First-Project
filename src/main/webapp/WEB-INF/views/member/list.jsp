@@ -17,7 +17,7 @@ a{
 </head>
 <body>
 	<my:navBar current="signup" />
-
+	
 	<my:alert />
 
 	<div class="container-lg">

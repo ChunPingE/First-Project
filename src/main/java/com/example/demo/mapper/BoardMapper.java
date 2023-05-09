@@ -62,7 +62,7 @@ public interface BoardMapper {
 	@ResultMap("boardResultMap")
 	Board selectById(Integer id);
 	
-	@Update("UPDATE Board SET title = #{title}, body = #{body}, writer=#{writer} "
+	@Update("UPDATE Board SET title = #{title}, body = #{body} "
 			+ "WHERE id = #{id}")
 	int update(Board board);
 	
@@ -85,7 +85,7 @@ public interface BoardMapper {
 	void deleteFileNameByBoardId(Integer boardId);
 
 	@Delete("DELETE FROM FileName WHERE boardId = #{boardId} AND fileName = #{fileName}")
-	void deleteFileNameByBoardIdANndFileName(Integer boardId, String fileName);
+	void deleteFileNameByBoardIdAndFileName(Integer boardId, String fileName);
 	
 }
 

@@ -1,6 +1,7 @@
 <%@ tag language="java" pageEncoding="UTF-8"%>
 <%@ attribute name="current"%>
 <%@ taglib prefix="c" uri="jakarta.tags.core"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags"%>
 
 <nav class="navbar navbar-expand-lg bg-body-tertiary mb-5">
 	<div class="container-lg">
@@ -16,16 +17,36 @@
 				<li class="nav-item">
 					<a class="nav-link ${current eq 'list' ? 'active' : '' }" href="/list">목록</a>
 				</li>
+				
+				<sec:authorize access="isAuthenticated()">
+					<li class="nav-item">
+						<a class="nav-link ${current eq 'add' ? 'active' : ''}" href="/add">글쓰기</a>
+					</li>
+				</sec:authorize>
+				
+				<sec:authorize access="isAnonymous()">
+					<li class="nav-item">
+						<a class="nav-link ${current eq 'signup' ? 'active' : ''}" href="/member/signup">회원가입</a>
+					</li>
+				</sec:authorize>
+				
+				<sec:authorize access="isAuthenticated()">
+					<li class="nav-item">
+						<a class="nav-link ${current eq 'memberList' ? 'active' : ''}" href="/member/list">회원목록</a>
+					</li>
+				</sec:authorize>
+				
 				<li class="nav-item">
-					<a class="nav-link ${current eq 'add' ? 'active' : ''}" href="/add">글쓰기</a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link ${current eq 'signup' ? 'active' : ''}" href="/member/signup">회원가입</a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link ${current eq 'memberList' ? 'active' : ''}" href="/member/list">회원목록</a>
+					<sec:authorize access="isAnonymous()">
+						<a class="nav-link ${current eq 'login' ? 'active' : ''}" href="/member/login">로그인</a>
+					</sec:authorize>
+
+					<sec:authorize access="isAuthenticated()">
+						<a class="nav-link" href="/member/logout">로그아웃</a>
+					</sec:authorize>
 				</li>
 			</ul>
+			
 			<form action="/list" class="d-flex" role="search">
 				<div class="input-group">
 					<select class="form-select flex-grow-0" style="width: 100px;" name="type" id="">
@@ -44,3 +65,27 @@
 	</div>
 </nav>
 
+<sec:authentication property="name" var="username"/>
+
+<%-- 
+	<div>
+		<sec:authentication property="principal" />
+	</div>
+	<div>
+		<sec:authorize access="isAuthenticated()" var="loggedIn">
+			로그인한 상태
+		</sec:authorize>
+	</div>
+	
+	<div>
+		<sec:authorize access="isAnonymous()">
+			로그아웃한 상태
+		</sec:authorize>
+	</div>
+	
+	<div>
+		<sec:authorize access="${loggedIn}">
+			또 로그인한 상태
+		</sec:authorize>
+	</div>
+	--%>

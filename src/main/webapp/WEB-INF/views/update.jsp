@@ -51,12 +51,12 @@
 						<label for="bodyInput" class="form-label">본문</label>
 						<textarea rows="10" name="body" id="bodyInput" class="form-control">${board.body }</textarea>
 					</div>
-
+					<%-- 
 					<div class="mb-3">
 						<label for="writerInput" class="form-label">작성자</label>
 						<input type="text" id="writerInput" name="writer" class="form-control" value="${board.writer}" />
 					</div>
-
+					--%>
 					<div class="mb-3">
 						<label for="writerInput" class="form-label">작성일시</label>
 						<input type="text" name="inserted" class="form-control" value="${board.inserted }" readonly />
