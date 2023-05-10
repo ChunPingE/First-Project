@@ -30,9 +30,16 @@
 					</li>
 				</sec:authorize>
 				
-				<sec:authorize access="isAuthenticated()">
+				<sec:authorize access="hasAuthority('admin')">
 					<li class="nav-item">
 						<a class="nav-link ${current eq 'memberList' ? 'active' : ''}" href="/member/list">회원목록</a>
+					</li>
+				</sec:authorize>
+				
+				<sec:authorize access="isAuthenticated()">
+					<sec:authentication property="name" var="username"/>
+					<li class="nav-item">
+						<a class="nav-link ${current eq 'memberInfo' ? 'active' : ''}" href="/member/info?id=${username}">정보보기</a>
 					</li>
 				</sec:authorize>
 				
@@ -65,7 +72,9 @@
 	</div>
 </nav>
 
-<sec:authentication property="name" var="username"/>
+<div>
+	<sec:authentication property="principal" />
+</div>
 
 <%-- 
 	<div>

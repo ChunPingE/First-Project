@@ -16,7 +16,7 @@ a{
 </style>
 </head>
 <body>
-	<my:navBar current="signup" />
+	<my:navBar current="memberList"/>
 	
 	<my:alert />
 

@@ -4,6 +4,7 @@ import java.util.*;
 
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.security.access.prepost.*;
+import org.springframework.security.core.*;
 import org.springframework.stereotype.*;
 import org.springframework.ui.*;
 import org.springframework.web.bind.annotation.*;
@@ -12,7 +13,8 @@ import org.springframework.web.servlet.mvc.support.*;
 import com.example.demo.domain.*;
 import com.example.demo.service.*;
 
-import ch.qos.logback.core.recovery.*;
+import jakarta.servlet.*;
+import jakarta.servlet.http.*;
 
 @Controller
 @RequestMapping("member")
@@ -47,6 +49,7 @@ public class MemberController {
 	}
 
 	@GetMapping("list")
+	@PreAuthorize("hasAuthority('admin')")
 	public void memberList(Model model) {
 		List<Member> list = service.listMember();
 		model.addAttribute("memberList", list);
@@ -54,18 +57,20 @@ public class MemberController {
 
 	// 경로: /member/info?id=
 	@GetMapping("info")
-	@PreAuthorize("isAuthenticated()")
+	@PreAuthorize("isAuthenticated() and (authentication.name eq #id) or hasAuthority('admin')")
 	public void memberList(String id, Model model) {
 		Member member = service.getInfo(id);
 		model.addAttribute("member", member);
 	}
 	
-	@PreAuthorize("isAuthenticated()")
 	@PostMapping("remove")
-	public String remove(Member member, RedirectAttributes rttr) {
+	@PreAuthorize("isAuthenticated() and (authentication.name eq #member.id)")
+	public String remove(Member member, RedirectAttributes rttr, HttpServletRequest request) throws ServletException {
 		boolean ok = service.remove(member);
 		if (ok) {
 			rttr.addFlashAttribute("message", "회원탈퇴하였습니다.");
+			//로그아웃
+			request.logout();
 			return "redirect:/list";
 		} else {
 			rttr.addFlashAttribute("message", "회원탈퇴시 문제가 발생했습니다..");
@@ -74,14 +79,14 @@ public class MemberController {
 	}
 
 	@GetMapping("update")
-	@PreAuthorize("isAuthenticated()")
-	public void updateForm(String id, Model model) {
+	@PreAuthorize("isAuthenticated() and (authentication.name eq #id)")
+	public void updateForm(String id, Model model, Authentication authentication) {
 		Member member = service.getInfo(id);
 		model.addAttribute("member", member);
 	}
 	
 	@PostMapping("update")
-	@PreAuthorize("isAuthenticated()")
+	@PreAuthorize("isAuthenticated() and (authentication.name eq #member.id)")
 	public String updatePorc(Member member, String inputPassword, RedirectAttributes rttr) {
 		boolean ok = service.modify(member, inputPassword);
 
@@ -93,5 +98,4 @@ public class MemberController {
 			return "redirect:/member/update?id=" + member.getId();
 		}
 	}
-
 }

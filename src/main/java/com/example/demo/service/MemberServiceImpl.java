@@ -18,6 +18,9 @@ public class MemberServiceImpl implements MemberService {
 	MemberMapper mapper;
 	
 	@Autowired
+	BoardService boardService;
+	
+	@Autowired
 	private PasswordEncoder passwordEncoder;
 
 	@Override
@@ -51,6 +54,11 @@ public class MemberServiceImpl implements MemberService {
 		//dbMember.getPassword().equals(member.getPassword()
 		if (passwordEncoder.matches(member.getPassword(), dbMember.getPassword())) {
 			// 암호가 같으면?
+			
+			//이 회원이 작성한 게시물 row 삭제
+			boardService.removeByWriter(member.getId());
+			
+			//회원 테이블 삭제
 			cnt = mapper.deleteById(member.getId());
 		}
 		return cnt == 1;

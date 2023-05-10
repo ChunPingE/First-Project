@@ -202,4 +202,14 @@ public class BoardServiceImpl implements BoardService {
 		return cnt == 1;
 	}
 
+	@Override
+	public void removeByWriter(String writer) {
+		// 파일명 조회
+		List<Integer> idList = mapper.selectIdByWriter(writer);
+		
+		for (Integer id : idList) {
+			remove(id);
+		}
+	}
+
 }
