@@ -72,29 +72,28 @@
 	</div>
 </nav>
 
+<%-- 
 <div>
 	<sec:authentication property="principal" />
-</div>
+</div> 
+--%>
 
 <%-- 
-	<div>
-		<sec:authentication property="principal" />
-	</div>
-	<div>
-		<sec:authorize access="isAuthenticated()" var="loggedIn">
-			로그인한 상태
-		</sec:authorize>
-	</div>
-	
-	<div>
-		<sec:authorize access="isAnonymous()">
-			로그아웃한 상태
-		</sec:authorize>
-	</div>
-	
-	<div>
-		<sec:authorize access="${loggedIn}">
-			또 로그인한 상태
-		</sec:authorize>
-	</div>
-	--%>
+<div>
+	<sec:authorize access="isAuthenticated()" var="loggedIn">
+		로그인한 상태
+	</sec:authorize>
+</div>
+
+<div>
+	<sec:authorize access="isAnonymous()">
+		로그아웃한 상태
+	</sec:authorize>
+</div>
+
+<div>
+	<sec:authorize access="${loggedIn}">
+		또 로그인한 상태
+	</sec:authorize>
+</div>
+--%>

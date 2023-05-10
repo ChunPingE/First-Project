@@ -11,8 +11,8 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body>
-	<my:navBar current="signup"/>
-	
+	<my:navBar current="signup" />
+
 	<my:alert />
 
 	<div class="container-lg">
@@ -22,11 +22,23 @@
 				<form method="post">
 					<div class="mb-3">
 						<label for="idInput" class="form-label">아이디</label>
-						<input type="text" id="idInput" class="form-control" name="id" value="${member.id}"/>
+						<input type="text" id="idInput" class="form-control" name="id" value="${member.id}" />
 					</div>
 					<div class="mb-3">
 						<label for="pwdInput" class="form-label">비밀번호</label>
 						<input type="password" id="pwdInput" class="form-control" name="password" />
+					</div>
+					<div class="mb-3">
+						<label for="pwdInputCheck" class="form-label">비밀번호확인</label>
+						<input type="password" id="pwdInputCheck" class="form-control" />
+						<div id="pwdSuccess" class="form-text text-primary d-none">
+							<i class="fa-solid fa-check"></i>
+							비밀번호가 일치합니다.
+						</div>
+						<div id="pwdFail" class="form-text text-danger d-none">
+							<i class="fa-solid fa-triangle-exclamation"></i>
+							비밀번호가 일치하지 않습니다.
+						</div>
 					</div>
 					<div class="mb-3">
 						<label for="nickNameInput" class="form-label">별명</label>
@@ -34,10 +46,10 @@
 					</div>
 					<div class="mb-3">
 						<label for="emailInput" class="form-label">이메일</label>
-						<input type="email" id="emailInput" class="form-control" name="email" value="${member.email}"/>
+						<input type="email" id="emailInput" class="form-control" name="email" value="${member.email}" />
 					</div>
 					<div class="mb-3">
-						<input type="submit" class="btn btn-primary" value="가입" />
+						<input type="submit" id="signupSubmit" class="btn btn-primary disabled" value="가입" />
 					</div>
 				</form>
 			</div>
@@ -45,5 +57,7 @@
 	</div>
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js" integrity="sha512-pumBsjNRGGqkPzKHndZMaAG+bir374sORyzM3uulLV14lN5LyykqNk8eEeUlUkB3U0M4FApyaHraT65ihJhDpQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+	<script src="/js/member/signup.js"></script>
 </body>
 </html>

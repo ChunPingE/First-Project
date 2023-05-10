@@ -27,6 +27,22 @@
 					<div class="mb-3">
 						<label for="pwdInput" class="form-label">비밀번호</label>
 						<input type="text" id="pwdInput" class="form-control" name="password" value="" />
+						<div id="pwdCheck" class="form-text text-secondary">
+							입력하지 않으면 기존 패스워드를 유지합니다.							
+						</div>
+					</div>
+					<div class="mb-3">
+						<label for="pwdInputCheck" class="form-label">비밀번호확인</label>
+						<input type="text" id="pwdInputCheck" class="form-control" value="" />
+						
+						<div id="pwdSuccess" class="form-text text-primary d-none">
+							<i class="fa-solid fa-check"></i>
+							비밀번호가 일치합니다.
+						</div>
+						<div id="pwdFail" class="form-text text-danger d-none">
+							<i class="fa-solid fa-triangle-exclamation"></i>
+							비밀번호가 일치하지 않습니다.
+						</div>
 					</div>
 					<div class="mb-3">
 						<label for="nickNameInput" class="form-label">별명</label>
@@ -37,7 +53,7 @@
 						<input type="email" id="emailInput" class="form-control" name="email" value="${member.email}" />
 					</div>
 					<div class="mb-3">
-						<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#confirmModal">수정</button>
+						<button type="button" id="updateButton" class="btn btn-primary disabled" data-bs-toggle="modal" data-bs-target="#confirmModal">수정</button>
 					</div>
 				</form>
 			</div>
@@ -54,18 +70,21 @@
 				</div>
 				<div class="modal-body">
 					<label for="inputOldPassword" class="form-label">이전 암호</label>
-					<input form="modifyForm" id="inputOldPassword" class="form-control" type="text" name="inputPassword" />
+					<input form="modifyForm" id="inputOldPassword" class="form-control" type="password" name="inputPassword" />
 				</div>
 				<div class="modal-footer">
 					<button type="submit" form="modifyForm" class="btn btn-primary">확인</button>
 					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
 				</div>
 			</div>
-			
+
 		</div>
 	</div>
 
-	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js" integrity="sha512-pumBsjNRGGqkPzKHndZMaAG+bir374sORyzM3uulLV14lN5LyykqNk8eEeUlUkB3U0M4FApyaHraT65ihJhDpQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js" integrity="sha512-pumBsjNRGGqkPzKHndZMaAG+bir374sORyzM3uulLV14lN5LyykqNk8eEeUlUkB3U0M4FApyaHraT65ihJhDpQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+	
+	<script src="/js/member/update.js"></script>
+
 </body>
 </html>
