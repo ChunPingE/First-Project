@@ -65,3 +65,9 @@
 2023.04.25 63일차 SpringBoot 마이바티스 + DB 데이터 정규화 <br>
 2023.04.26 64일차 SpringBoot @GetMapping, @PostMapping, RedirectAttributes + DB 서브쿼리<br>
 2023.04.27 65일차 간단한 프로젝트 시작 기존 spring리포지터리 추가 사항 통합해서 진행예정 https://github.com/ChunPingE/springbootstudy <br>
+2023.04.28 66일차 페이지네이션 +  Dynamic SQL <br>
+2023.05.01 67일차 Dynamic SQL + 파일 업로드 <br>
+2023.05.02 68일차 파일업로드 + resultMap <br>
+2023.05.03 69일차 aws파일업로드 <br>
+2023.05.04 70일차 aws업로드 + 회원 <br>
+2023.05.08 71일차 스프링 시큐리티 인증 <br>
