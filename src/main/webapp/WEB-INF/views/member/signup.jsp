@@ -23,6 +23,9 @@
 					<div class="mb-3">
 						<label for="idInput" class="form-label">아이디</label>
 						<input type="text" id="idInput" class="form-control" name="id" value="${member.id}" />
+						<div id="availableIdMessage" class="d-none">사용가능한 ID입니다.</div>
+						<div id="notAvailableIdMessage" class="d-none">사용 불가능한 ID입니다.</div>
+						<button type="button" id="checkIdBtn">아이디 중복 체크</button>
 					</div>
 					<div class="mb-3">
 						<label for="pwdInput" class="form-label">비밀번호</label>

@@ -1,3 +1,22 @@
+// id중복확인버튼이 클릭되면
+$("#checkIdBtn").click(function() {
+	//입력한 id와 ajax요청 보내서
+	const userId = $("inputId").val();
+	$.ajax("/member/check/" + userId, {
+		success: function(data) {
+			if (data.available) {
+				//사용가능하다는 메세지 출력
+				$("#availableIdMessage").removeClass("d-none");
+				$("#notAvailableIdMessage").addClass("d-none");
+			} else {
+				// 사용가능하지 않다는 메시지 출력
+				$("#availableIdMessage").addClass("d-none");
+				$("#notAvailableIdMessage").removeClass("d-none");
+			}
+		}
+	});
+})
+
 //패스워드, 패스워드 체크 인풋에 키업 이벤트 발생시
 $("#pwdInput, #pwdInputCheck, #idInput, #nickNameInput").keyup(function() {
 	// 패스워드에 입력한 값
@@ -26,3 +45,11 @@ $("#pwdInput, #pwdInputCheck, #idInput, #nickNameInput").keyup(function() {
 		$("#pwdFail").removeClass("d-none");
 	}
 })
+
+
+
+
+
+
+
+

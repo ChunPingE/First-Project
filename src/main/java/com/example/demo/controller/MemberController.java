@@ -62,14 +62,14 @@ public class MemberController {
 		Member member = service.getInfo(id);
 		model.addAttribute("member", member);
 	}
-	
+
 	@PostMapping("remove")
 	@PreAuthorize("isAuthenticated() and (authentication.name eq #member.id)")
 	public String remove(Member member, RedirectAttributes rttr, HttpServletRequest request) throws ServletException {
 		boolean ok = service.remove(member);
 		if (ok) {
 			rttr.addFlashAttribute("message", "회원탈퇴하였습니다.");
-			//로그아웃
+			// 로그아웃
 			request.logout();
 			return "redirect:/list";
 		} else {
@@ -84,7 +84,7 @@ public class MemberController {
 		Member member = service.getInfo(id);
 		model.addAttribute("member", member);
 	}
-	
+
 	@PostMapping("update")
 	@PreAuthorize("isAuthenticated() and (authentication.name eq #member.id)")
 	public String updatePorc(Member member, String inputPassword, RedirectAttributes rttr) {
@@ -97,5 +97,12 @@ public class MemberController {
 			rttr.addFlashAttribute("message", "회원 정보 수정에 실패하였습니다.");
 			return "redirect:/member/update?id=" + member.getId();
 		}
+	}
+
+	@GetMapping("/check/{id}")
+	@ResponseBody
+	public Map<String, Object> checkId(@PathVariable("id") String id) {
+		
+		return service.checkId(id);
 	}
 }

@@ -14,4 +14,6 @@ public interface MemberService {
 	boolean remove(Member member);
 
 	boolean modify(Member member, String inputPassword);
+
+	Map<String, Object> checkId(String id);
 }
