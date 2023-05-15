@@ -16,4 +16,8 @@ public interface MemberService {
 	boolean modify(Member member, String inputPassword);
 
 	Map<String, Object> checkId(String id);
+
+	Map<String, Object> checkNickName(String nickName);
+
+	Map<String, Object> checkEmail(String email);
 }

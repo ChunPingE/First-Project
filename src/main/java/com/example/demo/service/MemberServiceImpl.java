@@ -88,4 +88,28 @@ public class MemberServiceImpl implements MemberService {
 		Member member = mapper.selectById(id);
 		return Map.of("available", member == null);
 	}
+
+	@Override
+	public Map<String, Object> checkNickName(String nickName) {
+		Member member = mapper.selectByNickName(nickName);
+		return Map.of("available", member == null);
+	}
+
+	@Override
+	public Map<String, Object> checkEmail(String email) {
+		Member member = mapper.selectByEamil(email);
+		return Map.of("available", member == null);
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+
 }

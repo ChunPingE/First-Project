@@ -105,4 +105,16 @@ public class MemberController {
 		
 		return service.checkId(id);
 	}
+	
+	@GetMapping("/check/nickName/{nickName}")
+	@ResponseBody
+	public Map<String, Object> checkNickName(@PathVariable("nickName") String nickName){
+		return service.checkNickName(nickName);
+	}
+	
+	@GetMapping("/check/email/{email}")
+	@ResponseBody
+	public Map<String, Object> checkEmail(@PathVariable("email") String email){
+		return service.checkEmail(email);
+	}
 }
