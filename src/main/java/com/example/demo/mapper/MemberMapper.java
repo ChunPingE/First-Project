@@ -39,7 +39,7 @@ public interface MemberMapper {
 			SELECT * FROM Member
 			WHERE email = #{email}
 			""")
-	Member selectByEamil(String email);
+	Member selectByEmail(String email);
 
 	@Delete("""
 			DELETE FROM Member WHERE id = #{id}

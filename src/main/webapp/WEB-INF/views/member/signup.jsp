@@ -21,9 +21,9 @@
 				<h1>회원가입</h1>
 				<form method="post">
 					<div class="mb-3">
-						<label for="idInput" class="form-label">아이디</label>
+						<label for="InputId" class="form-label">아이디</label>
 						<div class="input-group">
-							<input type="text" id="idInput" class="form-control" name="id" value="${member.id}" />
+							<input type="text" id="InputId" class="form-control" name="id" value="${member.id}" />
 							<button type="button" id="checkIdBtn" class="btn btn-outline-secondary">중복확인</button>
 						</div>
 						<div id="availableIdMessage" class="form-text text-primary d-none">

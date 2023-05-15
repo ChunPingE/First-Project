@@ -99,22 +99,37 @@ public class MemberController {
 		}
 	}
 
-	@GetMapping("/check/{id}")
+	@GetMapping("/checkid/{id}")
 	@ResponseBody
 	public Map<String, Object> checkId(@PathVariable("id") String id) {
-		
+
 		return service.checkId(id);
 	}
-	
-	@GetMapping("/check/nickName/{nickName}")
+
+	@GetMapping("/checkNickName/{nickName}")
 	@ResponseBody
-	public Map<String, Object> checkNickName(@PathVariable("nickName") String nickName){
-		return service.checkNickName(nickName);
+	public Map<String, Object> checkNickName(@PathVariable("nickName") String nickName, Authentication authentication) {
+		return service.checkNickName(nickName, authentication);
 	}
-	
-	@GetMapping("/check/email/{email}")
+
+	@GetMapping("/checkEmail/{email}")
 	@ResponseBody
-	public Map<String, Object> checkEmail(@PathVariable("email") String email){
-		return service.checkEmail(email);
+	public Map<String, Object> checkEmail(@PathVariable("email") String email, Authentication authentication) {
+		return service.checkEmail(email, authentication);
 	}
+
+	/*
+	 * @GetMapping("/updatenickNameCheck/{nickName}")
+	 * 
+	 * @ResponseBody public Map<String, Object>
+	 * updateNickNameCheck(@PathVariable("nickName") String nickName, String id){
+	 * return service.checkUpdateNickName(nickName, id); }
+	 * 
+	 * @GetMapping("/updateEmailCheck/{email}")
+	 * 
+	 * @ResponseBody public Map<String, Object>
+	 * updateEmailCheck(@PathVariable("email") String email, String id){ return
+	 * service.checkUpdateEmail(email, id); }
+	 */
+
 }

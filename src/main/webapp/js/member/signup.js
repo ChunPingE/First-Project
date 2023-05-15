@@ -12,7 +12,7 @@ function enableSubmit() {
 }
 
 //id에 input에 입력시
-$("#idInput").keyup(function() {
+$("#InputId").keyup(function() {
 	// 아이디 중복확인 다시
 	checkId = false;
 	$("#availableIdMessage").addClass("d-none")
@@ -45,8 +45,8 @@ $("#emailInput").keyup(function() {
 // id중복확인버튼이 클릭되면
 $("#checkIdBtn").click(function() {
 	//입력한 id와 ajax요청 보내서
-	const userId = $("idInput").val();
-	$.ajax("/member/check/" + userId, {
+	const userId = $("InputId").val();
+	$.ajax("/member/checkid/" + userId, {
 		success: function(data) {
 			if (data.available) {
 				//사용가능하다는 메세지 출력
@@ -68,7 +68,7 @@ $("#checkIdBtn").click(function() {
 //별명 중복체크
 $("#checkNickNameBtn").click(function() {
 	const userNickName = $("#nickNameInput").val();
-	$.ajax("/member/check/nickName/" + userNickName, {
+	$.ajax("/member/checknickName/" + userNickName, {
 		success: function(data) {
 			if (data.available) {
 				$("#availableNickNameMessage").removeClass("d-none");
@@ -86,7 +86,7 @@ $("#checkNickNameBtn").click(function() {
 //이메일 중복체크
 $("#checkEmailBtn").click(function() {
 	const userEmail = $("#emailInput").val();
-	$.ajax("/member/check/email/" + userEmail, {
+	$.ajax("/member/checkemail/" + userEmail, {
 		success: function(data) {
 			if (data.available) {
 				$("#availableEmailMessage").removeClass("d-none");
@@ -103,7 +103,7 @@ $("#checkEmailBtn").click(function() {
 })
 
 //패스워드, 패스워드 체크 인풋에 키업 이벤트 발생시
-$("#pwdInput, #pwdInputCheck, #idInput, #nickNameInput").keyup(function() {
+$("#pwdInput, #pwdInputCheck, #InputId, #nickNameInput").keyup(function() {
 	// 패스워드에 입력한 값
 	const pw1 = $("#pwdInput").val();
 	// 패스워드 확인에 입력한 값

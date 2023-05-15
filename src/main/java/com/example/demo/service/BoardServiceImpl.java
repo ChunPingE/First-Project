@@ -4,6 +4,7 @@ import java.io.*;
 import java.util.*;
 
 import org.springframework.beans.factory.annotation.*;
+import org.springframework.security.core.*;
 import org.springframework.stereotype.*;
 import org.springframework.transaction.annotation.*;
 import org.springframework.web.multipart.*;
@@ -26,6 +27,9 @@ public class BoardServiceImpl implements BoardService {
 
 	@Autowired
 	private BoardMapper mapper;
+
+	@Autowired
+	private BoardLikeMapper likeMapper;
 
 	public List<Board> listBoard() {
 		List<Board> list = mapper.selectAll();
@@ -76,6 +80,16 @@ public class BoardServiceImpl implements BoardService {
 
 	public Board getBoard(Integer id) {
 		return mapper.selectById(id);
+	}
+
+	@Override
+	public Integer getPrevId(Integer id) {
+		return mapper.selectPrevId(id);
+	}
+
+	@Override
+	public Integer getNextId(Integer id) {
+		return mapper.selectNextId(id);
 	}
 
 	@Transactional(rollbackFor = Exception.class)
@@ -206,10 +220,27 @@ public class BoardServiceImpl implements BoardService {
 	public void removeByWriter(String writer) {
 		// 파일명 조회
 		List<Integer> idList = mapper.selectIdByWriter(writer);
-		
+
 		for (Integer id : idList) {
 			remove(id);
 		}
+	}
+
+	@Override
+	public Map<String, Object> like(Authentication authentication, Like like) {
+		Map<String, Object> result = new HashMap<>();
+
+		result.put("like", false);
+
+		like.setMemberId(authentication.getName());
+		Integer deleteCnt = likeMapper.delete(like);
+
+		if (deleteCnt != 1) {
+			Integer insertCnt = likeMapper.insert(like);
+			result.put("like", true);
+		}
+
+		return result;
 	}
 
 }

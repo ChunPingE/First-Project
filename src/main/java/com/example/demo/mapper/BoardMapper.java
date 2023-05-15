@@ -11,11 +11,11 @@ public interface BoardMapper {
 
 	@Select("SELECT id, title, writer, inserted FROM Board ORDER BY id DESC")
 	List<Board> selectAll();
-	
+
 	@Select("""
 			<script>
 			<bind name="pattern" value="'%' + search + '%'"/>
-			SELECT b.*, count(f.id) fileCount 
+			SELECT b.*, count(f.id) fileCount
 			FROM Board b LEFT JOIN FileName f ON b.id = f.boardId
 			<where>
 			<if test="type eq 'all' or type eq 'title'">
@@ -26,20 +26,20 @@ public interface BoardMapper {
 			</if>
 			<if test="type eq 'all' or type eq 'body'">
 			OR body LIKE #{pattern}
-			</if>	
+			</if>
 			</where>
-			GROUP BY b.id 
-			ORDER BY b.id DESC 
+			GROUP BY b.id
+			ORDER BY b.id DESC
 			LIMIT #{startIndex}, #{rowPerPage}
 			</script>
 			""")
 	@ResultMap("boardViewMap")
 	List<BoardView> selectAllPaging(Integer startIndex, Integer rowPerPage, String search, String type);
-	
+
 	@Select("""
 			<script>
 			<bind name="pattern" value="'%' + search + '%'"/>
-			SELECT COUNT(id) count 
+			SELECT COUNT(id) count
 			FROM Board
 			<where>
 			<if test="type eq 'all' or type eq 'title'">
@@ -50,22 +50,22 @@ public interface BoardMapper {
 			</if>
 			<if test="type eq 'all' or type eq 'body'">
 			OR body LIKE #{pattern}
-			</if>	
+			</if>
 			</where>
 			</script>
 			""")
 	Integer countAll(String search, String type);
-	
+
 	@Select("SELECT b.id, b.title, b.body, b.writer, b.inserted, f.fileName FROM Board b "
 			+ "LEFT JOIN FileName f ON b.id = f.boardId "
 			+ "WHERE b.id = #{id}")
 	@ResultMap("boardResultMap")
 	Board selectById(Integer id);
-	
+
 	@Update("UPDATE Board SET title = #{title}, body = #{body} "
 			+ "WHERE id = #{id}")
 	int update(Board board);
-	
+
 	@Delete("DELETE FROM Board WHERE id = #{id}")
 	int deleteById(Integer id);
 
@@ -80,7 +80,7 @@ public interface BoardMapper {
 
 	@Select("SELECT fileName FROM FileName WHERE boardId = #{boardId}")
 	List<String> selectFileNamesByBoardId(Integer boardId);
-	
+
 	@Delete("DELETE FROM FileName WHERE boardId = #{boardId}")
 	void deleteFileNameByBoardId(Integer boardId);
 
@@ -93,29 +93,32 @@ public interface BoardMapper {
 			WHERE writer = #{writer}
 			""")
 	List<Integer> selectIdByWriter(String writer);
-	
+
+	@Select("""
+			SELECT * FROM Board
+			WHERE inserted < (SELECT inserted FROM Board where id = #{id})
+			ORDER BY inserted DESC
+			LIMIT 1;
+			""")
+	Integer selectPrevId(Integer id);
+
+	@Select("""
+			SELECT * FROM Board
+			WHERE inserted > (SELECT inserted FROM Board where id = #{id})
+			ORDER BY inserted DESC
+			LIMIT 1;
+			""")
+	Integer selectNextId(Integer id);
 }
 
 /*
-@Select("""
-		<script>
-		<bind name="pattern" value="'%' + search + '%'"/>
-		SELECT * FROM BoardView 
-		<where>
-		<if test="type eq 'all' or type eq 'title'">
-		title LIKE #{pattern}
-		</if>
-		<if test="type eq 'all' or type eq 'writer'">
-		OR writer LIKE #{pattern}
-		</if>
-		<if test="type eq 'all' or type eq 'body'">
-		OR body LIKE #{pattern}
-		</if>	
-		</where>
-		ORDER BY id DESC 
-		LIMIT #{startIndex}, #{rowPerPage}
-		</script>
-		""")
-@ResultMap("boardViewMap")
-List<BoardView> selectAllPaging(Integer startIndex, Integer rowPerPage, String search, String type);
-*/
+ * @Select(""" <script> <bind name="pattern" value="'%' + search + '%'"/> SELECT
+ * * FROM BoardView <where> <if test="type eq 'all' or type eq 'title'"> title
+ * LIKE #{pattern} </if> <if test="type eq 'all' or type eq 'writer'"> OR writer
+ * LIKE #{pattern} </if> <if test="type eq 'all' or type eq 'body'"> OR body
+ * LIKE #{pattern} </if> </where> ORDER BY id DESC LIMIT #{startIndex},
+ * #{rowPerPage} </script> """)
+ * 
+ * @ResultMap("boardViewMap") List<BoardView> selectAllPaging(Integer
+ * startIndex, Integer rowPerPage, String search, String type);
+ */

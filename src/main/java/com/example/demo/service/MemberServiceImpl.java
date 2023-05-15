@@ -3,6 +3,7 @@ package com.example.demo.service;
 import java.util.*;
 
 import org.springframework.beans.factory.annotation.*;
+import org.springframework.security.core.*;
 import org.springframework.security.crypto.password.*;
 import org.springframework.stereotype.*;
 import org.springframework.transaction.annotation.*;
@@ -90,26 +91,41 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override
-	public Map<String, Object> checkNickName(String nickName) {
+	public Map<String, Object> checkNickName(String nickName, Authentication authentication) {
 		Member member = mapper.selectByNickName(nickName);
-		return Map.of("available", member == null);
+		if (authentication != null) {
+			Member checkMember = mapper.selectByNickName(authentication.getName());
+			return Map.of("available", member == null || checkMember.getNickName().equals(nickName));
+		} else {
+			return Map.of("available", member == null);
+		}
+	}
+	
+	public Map<String, Object> checkEmail(String email, Authentication authentication) {
+		Member member = mapper.selectByEmail(email);
+		
+		if (authentication != null) {
+			Member checkMember = mapper.selectById(authentication.getName());
+			
+			return Map.of("available", member == null || checkMember.getEmail().equals(email));
+		} else {
+			return Map.of("available", member == null);
+			
+		}
+		
 	}
 
-	@Override
-	public Map<String, Object> checkEmail(String email) {
-		Member member = mapper.selectByEamil(email);
-		return Map.of("available", member == null);
-	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+	/*
+	 * @Override public Map<String, Object> checkUpdateNickName(String nickName,
+	 * String id) { Member member = mapper.selectByNickName(nickName); Member
+	 * checkMember = mapper.selectById(id); if
+	 * (nickName.equals(checkMember.getNickName())) { return Map.of("available",
+	 * true); } return Map.of("available", member == null); }
+	 * 
+	 * @Override public Map<String, Object> checkUpdateEmail(String email, String
+	 * id) { Member member = mapper.selectByEamil(email); Member checkMember =
+	 * mapper.selectById(id); if (email.equals(checkMember.getEmail())) { return
+	 * Map.of("available", true); } return Map.of("available", member == null); }
+	 */
 
 }

@@ -47,8 +47,13 @@ public class BoardController {
 		// 1. request param 수집가공
 		// 2. business logic 처리
 		Board board = service.getBoard(id);
+
+		Integer prevId = service.getPrevId(id);
+		Integer nextId = service.getNextId(id);
 		// 3. add attribute
 		model.addAttribute("board", board);
+		model.addAttribute("prevId", prevId);
+		model.addAttribute("nextId", nextId);
 		// 4. fowrard/redirect
 		return "detail";
 	}
@@ -63,7 +68,7 @@ public class BoardController {
 	// @RequestMapping(value = "/update/{id}", method = RequestMethod.POST)
 	@PostMapping("/update/{id}")
 	@PreAuthorize("isAuthenticated() and @customSecurityChecker.checkBoardWriter(authentication, #board.id)")
-	//수정하려는 게시물 id : board.id를 전달하던지 board를 전달
+	// 수정하려는 게시물 id : board.id를 전달하던지 board를 전달
 	public String updateProcess(Board board,
 			@RequestParam(value = "removeFiles", required = false) List<String> removeFileNames,
 			@RequestParam(value = "files", required = false) MultipartFile[] files,
@@ -129,5 +134,11 @@ public class BoardController {
 			e.printStackTrace();
 		}
 		return "redirect:/add";
+	}
+
+	@PostMapping("/like")
+	@ResponseBody
+	public Map<String, Object> like(@RequestBody Like like, Authentication authentication) {
+		return service.like(authentication, like);
 	}
 }

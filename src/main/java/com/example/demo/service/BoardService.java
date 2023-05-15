@@ -4,6 +4,7 @@ import java.io.*;
 import java.util.*;
 
 import org.springframework.beans.factory.annotation.*;
+import org.springframework.security.core.*;
 import org.springframework.stereotype.*;
 import org.springframework.web.multipart.*;
 
@@ -25,4 +26,10 @@ public interface BoardService {
 	public Map<String, Object> listBoard(Integer page, String search, String type);
 
 	public void removeByWriter(String id);
+
+	public Integer getPrevId(Integer id);
+
+	public Integer getNextId(Integer id);
+
+	public Map<String, Object> like(Authentication authentication, Like like);
 }

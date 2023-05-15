@@ -21,8 +21,8 @@
 				<h1>회원수정</h1>
 				<form id="modifyForm" action="/member/update" method="post">
 					<div class="mb-3">
-						<label for="idInput" class="form-label">아이디</label>
-						<input type="text" id="idInput" class="form-control" name="id" value="${member.id}" readonly />
+						<label for="InputId" class="form-label">아이디</label>
+						<input type="text" id="InputId" class="form-control" name="id" value="${member.id}" readonly />
 					</div>
 					<div class="mb-3">
 						<label for="pwdInput" class="form-label">비밀번호</label>
@@ -44,18 +44,39 @@
 					</div>
 					<div class="mb-3">
 						<label for="nickNameInput" class="form-label">별명</label>
-						<input type="text" id="nickNameInput" class="form-control" name="nickName" value="${member.nickName}" />
-						<div id="availableNickNameMessage" class="d-none">사용가능한 별명입니다.</div>
-						<div id="notAvailableNickNameMessage" class="d-none">사용 불가능한 별명입니다.</div>
-						<button type="button" id="checkNickNameBtn">별명 중복 체크</button>
+						
+						<div class="input-group">
+							<input type="text" id="nickNameInput" class="form-control" name="nickName" value="${member.nickName}" />
+							<button type="button" class="btn btn-outline-secondary" id="checkNickNameBtn">중복확인</button>
+						</div>
+						
+						<div id="availableNickNameMessage" class="form-text text-primary d-none">
+							<i class="fa-solid fa-check"></i>
+							사용가능한 별명입니다.
+						</div>
+						<div id="notAvailableNickNameMessage" class="form-text text-danger d-none">
+							<i class="fa-solid fa-triangle-exclamation"></i>
+							사용 불가능한 별명입니다.
+						</div>
 					</div>
+					
 					<div class="mb-3">
 						<label for="emailInput" class="form-label">이메일</label>
-						<input type="email" id="emailInput" class="form-control" name="email" value="${member.email}" />
-						<div id="availableEmailMessage" class="d-none">사용가능한 이메일입니다.</div>
-						<div id="notAvailableEmailMessage" class="d-none">사용 불가능한 이메일입니다.</div>
-						<button type="button" id="checkEmailBtn">이메일 중복 체크</button>
+						<div class="input-group">
+							<input type="email" id="emailInput" class="form-control" name="email" value="${member.email}" />
+							<button type="button" class="btn btn-outline-secondary" id="checkEmailBtn">중복확인</button>
+						</div>
+						
+						<div id="availableEmailMessage" class="form-text text-primary d-none">
+							<i class="fa-solid fa-check"></i>
+							사용가능한 이메일입니다.
+						</div>
+						<div id="notAvailableEmailMessage" class="form-text text-danger d-none">
+							<i class="fa-solid fa-triangle-exclamation"></i>
+							사용 불가능한 이메일입니다.
+						</div>
 					</div>
+					
 					<div class="mb-3">
 						<button type="button" id="updateButton" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#confirmModal">수정</button>
 					</div>
@@ -81,7 +102,6 @@
 					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
 				</div>
 			</div>
-
 		</div>
 	</div>
 

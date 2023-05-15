@@ -2,6 +2,8 @@ package com.example.demo.service;
 
 import java.util.*;
 
+import org.springframework.security.core.*;
+
 import com.example.demo.domain.*;
 
 public interface MemberService {
@@ -17,7 +19,11 @@ public interface MemberService {
 
 	Map<String, Object> checkId(String id);
 
-	Map<String, Object> checkNickName(String nickName);
+	Map<String, Object> checkNickName(String nickName, Authentication authentication);
 
-	Map<String, Object> checkEmail(String email);
+	Map<String, Object> checkEmail(String email, Authentication authentication);
+
+	// Map<String, Object> checkUpdateNickName(String nickName, String id);
+
+	// Map<String, Object> checkUpdateEmail(String email, String id);
 }
