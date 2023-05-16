@@ -1,5 +1,6 @@
 package com.example.demo.mapper;
 
+import java.io.*;
 import java.util.*;
 
 import org.apache.ibatis.annotations.*;
@@ -15,8 +16,10 @@ public interface BoardMapper {
 	@Select("""
 			<script>
 			<bind name="pattern" value="'%' + search + '%'"/>
-			SELECT b.*, count(f.id) fileCount
+			SELECT b.*, count(f.id) fileCount,
+			(SELECT COUNT(*) FROM BoardLike WHERE boardId = b.id) likeCount
 			FROM Board b LEFT JOIN FileName f ON b.id = f.boardId
+			
 			<where>
 			<if test="type eq 'all' or type eq 'title'">
 			title LIKE #{pattern}
@@ -28,6 +31,7 @@ public interface BoardMapper {
 			OR body LIKE #{pattern}
 			</if>
 			</where>
+			
 			GROUP BY b.id
 			ORDER BY b.id DESC
 			LIMIT #{startIndex}, #{rowPerPage}
@@ -41,6 +45,7 @@ public interface BoardMapper {
 			<bind name="pattern" value="'%' + search + '%'"/>
 			SELECT COUNT(id) count
 			FROM Board
+			
 			<where>
 			<if test="type eq 'all' or type eq 'title'">
 			title LIKE #{pattern}
@@ -52,6 +57,7 @@ public interface BoardMapper {
 			OR body LIKE #{pattern}
 			</if>
 			</where>
+			
 			</script>
 			""")
 	Integer countAll(String search, String type);
@@ -78,6 +84,7 @@ public interface BoardMapper {
 	@Options(useGeneratedKeys = true, keyProperty = "id")
 	int insert(Board board);
 
+	// 파일관련
 	@Insert("INSERT INTO FileName (boardId, fileName) "
 			+ "VALUES (#{id}, #{fileName})")
 	Integer insertFileName(Integer id, String fileName);
@@ -98,6 +105,7 @@ public interface BoardMapper {
 			""")
 	List<Integer> selectIdByWriter(String writer);
 
+	//이전글 다음글 혼자 만든것
 	@Select("""
 			SELECT * FROM Board
 			WHERE inserted < (SELECT inserted FROM Board where id = #{id})
@@ -109,10 +117,20 @@ public interface BoardMapper {
 	@Select("""
 			SELECT * FROM Board
 			WHERE inserted > (SELECT inserted FROM Board where id = #{id})
-			ORDER BY inserted DESC
+			ORDER BY inserted ASC
 			LIMIT 1;
 			""")
 	Integer selectNextId(Integer id);
+
+	@Select("""
+			SELECT * FROM Board ORDER BY inserted ASC LIMIT 1
+			""")
+	Integer selectFirstBoardId();
+	
+	@Select("""
+			SELECT * FROM Board ORDER BY inserted DESC LIMIT 1
+			""")
+	Integer selectLastBoardId();
 }
 
 /*

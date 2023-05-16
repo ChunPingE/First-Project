@@ -15,7 +15,7 @@ public interface BoardService {
 
 	public List<Board> listBoard();
 
-	public Board getBoard(Integer id);
+	public Board getBoard(Integer id, Authentication authentication);
 
 	public boolean update(Board board, List<String> removeFileNames, MultipartFile[] files) throws Exception;
 
@@ -27,9 +27,8 @@ public interface BoardService {
 
 	public void removeByWriter(String id);
 
-	public Integer getPrevId(Integer id);
-
-	public Integer getNextId(Integer id);
-
 	public Map<String, Object> like(Authentication authentication, Like like);
+
+	public Object getBoard(Integer id);
+
 }

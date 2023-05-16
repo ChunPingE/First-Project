@@ -18,6 +18,7 @@ $("#likeIcon").click(function() {
 				//빈하트
 				$("#likeIcon").html(`<i class="fa-regular fa-heart"></i>`);
 			}
+			$("#likeNumber").text(data.count);
 		},
 		error: function(jqXHR) {
 			//console.log("좋아요 실패");

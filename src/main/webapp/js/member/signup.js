@@ -68,7 +68,7 @@ $("#checkIdBtn").click(function() {
 //별명 중복체크
 $("#checkNickNameBtn").click(function() {
 	const userNickName = $("#nickNameInput").val();
-	$.ajax("/member/checknickName/" + userNickName, {
+	$.ajax("/member/checkNickName/" + userNickName, {
 		success: function(data) {
 			if (data.available) {
 				$("#availableNickNameMessage").removeClass("d-none");
@@ -86,7 +86,7 @@ $("#checkNickNameBtn").click(function() {
 //이메일 중복체크
 $("#checkEmailBtn").click(function() {
 	const userEmail = $("#emailInput").val();
-	$.ajax("/member/checkemail/" + userEmail, {
+	$.ajax("/member/checkEmail/" + userEmail, {
 		success: function(data) {
 			if (data.available) {
 				$("#availableEmailMessage").removeClass("d-none");

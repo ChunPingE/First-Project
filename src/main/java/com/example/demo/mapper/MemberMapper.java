@@ -58,7 +58,4 @@ public interface MemberMapper {
 			</script>
 			""")
 	int update(Member member);
-
-
-
 }

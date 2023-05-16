@@ -78,18 +78,39 @@ public class BoardServiceImpl implements BoardService {
 		return Map.of("pageInfo", pageInfo, "boardList", list);
 	}
 
-	public Board getBoard(Integer id) {
-		return mapper.selectById(id);
-	}
-
 	@Override
-	public Integer getPrevId(Integer id) {
-		return mapper.selectPrevId(id);
+	public Board getBoard(Integer id, Authentication authentication) {
+		Board board = mapper.selectById(id);
+		//현재 로그인하란 사람이 이 게시물에 좋아요 했는지?
+		//첫번째 글
+		Integer firstBoardId = mapper.selectFirstBoardId();
+		//마지막글
+		Integer lastBoardId = mapper.selectLastBoardId();
+		
+		if (id.equals(firstBoardId)) {
+		board.setPrevId(firstBoardId);
+		} else {
+			board.setPrevId(mapper.selectPrevId(id));
+		}
+		
+		if (id.equals(lastBoardId)) {
+			board.setPrevId(lastBoardId);
+		} else {
+			board.setNextId(mapper.selectNextId(id));
+		}
+		
+		if (authentication != null) {
+			Like like = likeMapper.select(id, authentication.getName());
+			if (like != null) {
+				board.setLiked(true);
+			}
+		}
+		return board;
 	}
-
+	
 	@Override
-	public Integer getNextId(Integer id) {
-		return mapper.selectNextId(id);
+	public Object getBoard(Integer id) {
+		return getBoard(id, null);
 	}
 
 	@Transactional(rollbackFor = Exception.class)
@@ -173,6 +194,8 @@ public class BoardServiceImpl implements BoardService {
 
 			s3.deleteObject(dor);
 		}
+		// 좋아요 테이블의 데이터 지우기
+		likeMapper.deleteByBoardId(id);
 
 		// 게시물 테이블의 데이터 지우기
 		int cnt = mapper.deleteById(id);
@@ -239,8 +262,13 @@ public class BoardServiceImpl implements BoardService {
 			Integer insertCnt = likeMapper.insert(like);
 			result.put("like", true);
 		}
+		
+		Integer count = likeMapper.countByBoardId(like.getBoardId());
+		result.put("count", count);
 
 		return result;
 	}
+
+
 
 }

@@ -30,7 +30,7 @@ a{
 		<table class="table">
 			<thead>
 				<tr>	
-					<th>글번호</th>
+					<th>#</th>
 					<th><i class="fa-solid fa-heart"></i></th>
 					<th>제목</th>
 					<th>작성자</th>

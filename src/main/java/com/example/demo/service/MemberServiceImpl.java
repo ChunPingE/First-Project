@@ -20,6 +20,9 @@ public class MemberServiceImpl implements MemberService {
 
 	@Autowired
 	BoardService boardService;
+	
+	@Autowired
+	private BoardLikeMapper likeMapper;
 
 	@Autowired
 	private PasswordEncoder passwordEncoder;
@@ -49,6 +52,7 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override
+	@Transactional(rollbackFor = Exception.class)
 	public boolean remove(Member member) {
 		Member dbMember = mapper.selectById(member.getId());
 		int cnt = 0;
@@ -58,7 +62,10 @@ public class MemberServiceImpl implements MemberService {
 
 			// 이 회원이 작성한 게시물 row 삭제
 			boardService.removeByWriter(member.getId());
-
+			
+			// 이 회원이 좋아요한 레코드 삭제
+			likeMapper.removeByMemberId(member.getId());
+			
 			// 회원 테이블 삭제
 			cnt = mapper.deleteById(member.getId());
 		}
@@ -66,6 +73,7 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override
+	@Transactional(rollbackFor = Exception.class)
 	public boolean modify(Member member, String inputPassword) {
 		int cnt = 0;
 

@@ -44,17 +44,14 @@ public class BoardController {
 	}
 
 	@GetMapping("/detail/{id}")
-	public String detail(@PathVariable("id") Integer id, Model model) {
+	public String detail(@PathVariable("id") Integer id, Model model,
+			Authentication authentication) {
 		// 1. request param 수집가공
 		// 2. business logic 처리
-		Board board = service.getBoard(id);
+		Board board = service.getBoard(id, authentication);
 
-		Integer prevId = service.getPrevId(id);
-		Integer nextId = service.getNextId(id);
 		// 3. add attribute
 		model.addAttribute("board", board);
-		model.addAttribute("prevId", prevId);
-		model.addAttribute("nextId", nextId);
 		// 4. fowrard/redirect
 		return "detail";
 	}
@@ -140,7 +137,7 @@ public class BoardController {
 	@PostMapping("/like")
 	@ResponseBody
 	public ResponseEntity<Map<String, Object>> like(@RequestBody Like like, Authentication authentication) {
-		
+
 		if (authentication == null) {
 			return ResponseEntity
 					.status(403)

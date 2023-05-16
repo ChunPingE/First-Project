@@ -29,6 +29,7 @@
 		<result column="writer" property="writer" />
 		<result column="inserted" property="inserted" />
 		<result column="fileCount" property="fileCount"/>
+		<result column="likeCount" property="likeCount" />
 	</resultMap>
 
 </mapper>

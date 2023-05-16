@@ -13,5 +13,11 @@ public class Board {
 	private LocalDateTime inserted;
 	private String writer;
 	private List<String> fileName;
+	
+	private Integer prevId;
+	private Integer nextId;
+	
+	private Boolean liked;
+	
 	private Integer likeCount;
 }
