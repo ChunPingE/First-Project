@@ -17,25 +17,32 @@
 
 	<my:alert />
 
+	<div class="toast-container top-0 start-50 translate-middle-x p-3">
+		<div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+			<div class="toast-header">
+				<button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+			</div>
+			<div class="toast-body"></div>
+		</div>
+	</div>
+
 	<div class="container-lg">
 		<!-- .row.justify-content-center>.col-12.col-md-8.col-lg-6 -->
 		<div class="row justify-content-center">
 			<div class="col-12 col-md-8 col-lg-6">
 				<h1>
-				<span id="boardIdText">
-					${board.id }
-				</span>
-				번게시물</h1>
+					<span id="boardIdText"> ${board.id } </span>
+					번게시물
+				</h1>
 				<div>
-					 <h1>
-						 <span id="likeIcon">
-							 <i class="fa-regular fa-heart"></i>
-						 </span>
-						 <span id="likeNumber">
-						 3
-						 <%-- ${board.like} --%>
-						 </span>
-					 </h1>
+					<h1>
+						<span id="likeIcon">
+							<i class="fa-regular fa-heart"></i>
+						</span>
+						<span id="likeNumber">
+							${board.likeCount}
+						</span>
+					</h1>
 				</div>
 				<div>
 					<div class="mb-3">
@@ -45,7 +52,7 @@
 
 					<!-- 그림 파일 출력 -->
 					<div class="mb-3">
-						<c:forEach items="${board.fileName }" var="fileName">
+						<c:forEach items="${board.fileName}" var="fileName">
 							<div>
 								<%-- http://localhost:8080/image/4122/slamdunk.jfif --%>
 								<%-- http://localhost:8080/image/게시물번호/fileName --%>

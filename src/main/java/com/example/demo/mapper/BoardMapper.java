@@ -56,9 +56,13 @@ public interface BoardMapper {
 			""")
 	Integer countAll(String search, String type);
 
-	@Select("SELECT b.id, b.title, b.body, b.writer, b.inserted, f.fileName FROM Board b "
-			+ "LEFT JOIN FileName f ON b.id = f.boardId "
-			+ "WHERE b.id = #{id}")
+	@Select("""
+			SELECT b.id, b.title, b.body, b.writer, b.inserted, f.fileName,
+			(SELECT COUNT(*) FROM BoardLike WHERE boardId = b.id) likeCount
+			FROM Board b 
+			LEFT JOIN FileName f ON b.id = f.boardId
+			WHERE b.id = #{id}
+			""")
 	@ResultMap("boardResultMap")
 	Board selectById(Integer id);
 
