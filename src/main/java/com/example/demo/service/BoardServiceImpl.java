@@ -250,6 +250,7 @@ public class BoardServiceImpl implements BoardService {
 	}
 
 	@Override
+	@Transactional(rollbackFor = Exception.class)
 	public Map<String, Object> like(Authentication authentication, Like like) {
 		Map<String, Object> result = new HashMap<>();
 
@@ -268,7 +269,4 @@ public class BoardServiceImpl implements BoardService {
 
 		return result;
 	}
-
-
-
 }
