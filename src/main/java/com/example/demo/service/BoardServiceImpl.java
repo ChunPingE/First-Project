@@ -22,14 +22,18 @@ public class BoardServiceImpl implements BoardService {
 	@Value("${aws.s3.bucketName}")
 	private String bucketName;
 
-	@Autowired
-	private S3Client s3;
+	private final S3Client s3;
+
+	private final BoardMapper mapper;
+
+	private final BoardLikeMapper likeMapper;
 
 	@Autowired
-	private BoardMapper mapper;
-
-	@Autowired
-	private BoardLikeMapper likeMapper;
+	public BoardServiceImpl(S3Client s3, BoardMapper mapper, BoardLikeMapper likeMapper) {
+		this.s3 = s3;
+		this.mapper = mapper;
+		this.likeMapper = likeMapper;
+	}
 
 	public List<Board> listBoard() {
 		List<Board> list = mapper.selectAll();
@@ -81,24 +85,24 @@ public class BoardServiceImpl implements BoardService {
 	@Override
 	public Board getBoard(Integer id, Authentication authentication) {
 		Board board = mapper.selectById(id);
-		//현재 로그인하란 사람이 이 게시물에 좋아요 했는지?
-		//첫번째 글
+		// 현재 로그인하란 사람이 이 게시물에 좋아요 했는지?
+		// 첫번째 글
 		Integer firstBoardId = mapper.selectFirstBoardId();
-		//마지막글
+		// 마지막글
 		Integer lastBoardId = mapper.selectLastBoardId();
-		
+
 		if (id.equals(firstBoardId)) {
-		board.setPrevId(firstBoardId);
+			board.setPrevId(firstBoardId);
 		} else {
 			board.setPrevId(mapper.selectPrevId(id));
 		}
-		
+
 		if (id.equals(lastBoardId)) {
 			board.setPrevId(lastBoardId);
 		} else {
 			board.setNextId(mapper.selectNextId(id));
 		}
-		
+
 		if (authentication != null) {
 			Like like = likeMapper.select(id, authentication.getName());
 			if (like != null) {
@@ -107,7 +111,7 @@ public class BoardServiceImpl implements BoardService {
 		}
 		return board;
 	}
-	
+
 	@Override
 	public Object getBoard(Integer id) {
 		return getBoard(id, null);
@@ -263,7 +267,7 @@ public class BoardServiceImpl implements BoardService {
 			Integer insertCnt = likeMapper.insert(like);
 			result.put("like", true);
 		}
-		
+
 		Integer count = likeMapper.countByBoardId(like.getBoardId());
 		result.put("count", count);
 
