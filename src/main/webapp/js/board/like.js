@@ -1,9 +1,9 @@
+const toast = new bootstrap.Toast(document.querySelector("#liveToast"));
 $("#likeIcon").click(function() {
 	// 게시물 번호 request body에 추가
 	const boardId = $("#boardIdText").text().trim();
 	// const data = {boardId : boardId};
 	const data = { boardId };
-	const toast = new bootstrap.Toast(document.querySelector("#liveToast"));
 
 	$.ajax("/like", {
 		method: "post",
