@@ -40,6 +40,7 @@ public class BoardServiceImpl implements BoardService {
 		return list;
 	}
 
+	
 	@Override
 	public Map<String, Object> listBoard(Integer page, String search, String type) {
 		Integer rowPerPage = 10;
@@ -52,7 +53,7 @@ public class BoardServiceImpl implements BoardService {
 		// 마지막 페이지 번호 (총 글개수 - 1) / rowPerPage + 1
 		Integer lastPageNumber = (numOfRecords - 1) / rowPerPage + 1;
 
-		// 페이지네이션 왼쪽 번호
+		// 페이지네이션 왼쪽 번호 
 		Integer leftPageNumber = page - 5;
 		leftPageNumber = Math.max(leftPageNumber, 1);
 
