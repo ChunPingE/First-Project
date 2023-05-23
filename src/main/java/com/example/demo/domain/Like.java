@@ -6,4 +6,7 @@ import lombok.*;
 public class Like {
 	private Integer boardId;
 	private String memberId;
+
+	
+	
 }

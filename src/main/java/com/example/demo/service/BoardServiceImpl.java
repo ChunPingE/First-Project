@@ -1,6 +1,5 @@
 package com.example.demo.service;
 
-import java.io.*;
 import java.util.*;
 
 import org.springframework.beans.factory.annotation.*;
@@ -28,11 +27,14 @@ public class BoardServiceImpl implements BoardService {
 
 	private final BoardLikeMapper likeMapper;
 
+	private final CommentMapper commentMapper;
+
 	@Autowired
-	public BoardServiceImpl(S3Client s3, BoardMapper mapper, BoardLikeMapper likeMapper) {
+	public BoardServiceImpl(S3Client s3, BoardMapper mapper, BoardLikeMapper likeMapper, CommentMapper commentMapper) {
 		this.s3 = s3;
 		this.mapper = mapper;
 		this.likeMapper = likeMapper;
+		this.commentMapper = commentMapper;
 	}
 
 	public List<Board> listBoard() {
@@ -40,7 +42,6 @@ public class BoardServiceImpl implements BoardService {
 		return list;
 	}
 
-	
 	@Override
 	public Map<String, Object> listBoard(Integer page, String search, String type) {
 		Integer rowPerPage = 10;
@@ -53,7 +54,7 @@ public class BoardServiceImpl implements BoardService {
 		// 마지막 페이지 번호 (총 글개수 - 1) / rowPerPage + 1
 		Integer lastPageNumber = (numOfRecords - 1) / rowPerPage + 1;
 
-		// 페이지네이션 왼쪽 번호 
+		// 페이지네이션 왼쪽 번호
 		Integer leftPageNumber = page - 5;
 		leftPageNumber = Math.max(leftPageNumber, 1);
 
@@ -201,6 +202,9 @@ public class BoardServiceImpl implements BoardService {
 		}
 		// 좋아요 테이블의 데이터 지우기
 		likeMapper.deleteByBoardId(id);
+		
+		//comment테이블 데이터 지우기
+		commentMapper.deleteByBoardId(id);
 
 		// 게시물 테이블의 데이터 지우기
 		int cnt = mapper.deleteById(id);

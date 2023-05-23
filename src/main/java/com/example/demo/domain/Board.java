@@ -20,4 +20,8 @@ public class Board {
 	private Boolean liked;
 	
 	private Integer likeCount;
+
+	
+	
+	
 }

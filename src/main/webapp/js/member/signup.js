@@ -45,7 +45,7 @@ $("#emailInput").keyup(function() {
 // id중복확인버튼이 클릭되면
 $("#checkIdBtn").click(function() {
 	//입력한 id와 ajax요청 보내서
-	const userId = $("InputId").val();
+	const userId = $("#InputId").val();
 	$.ajax("/member/checkid/" + userId, {
 		success: function(data) {
 			if (data.available) {
@@ -79,7 +79,8 @@ $("#checkNickNameBtn").click(function() {
 				$("#notAvailableNickNameMessage").removeClass("d-none");
 				checkNickName = false;
 			}
-		}
+		},
+		complete: enableSubmit
 	});
 })
 

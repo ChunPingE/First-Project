@@ -26,6 +26,7 @@
 							<input type="text" id="InputId" class="form-control" name="id" value="${member.id}" />
 							<button type="button" id="checkIdBtn" class="btn btn-outline-secondary">중복확인</button>
 						</div>
+						
 						<div id="availableIdMessage" class="form-text text-primary d-none">
 							<i class="fa-solid fa-check"></i>
 							사용가능한 ID입니다.

@@ -96,20 +96,20 @@
 						</div>
 
 						<div id="commentContainer">
-							<div id="addCommentContainer">
-								<h6>입력</h6>
-								<textarea id="commentTextArea"></textarea>
-								<button id="sendCommentBtn">전송</button>
-							</div>
+							<sec:authorize access="isAuthenticated()">
+								<div id="addCommentContainer">
+									<h6>댓글 입력</h6>
 
-							<div id="updateCommentContainer">
-								<h6>수정</h6>
-								<input type="hidden" id="commentUpdateIdInput" />
-								<textarea id="commentUpdateTextArea"></textarea>
-								<button id="updateCommentBtn">수정</button>
-							</div>
-
-							<div id="commentListContainer"></div>
+									<div class="input-group">
+										<textarea class="form-control" id="commentTextArea"></textarea>
+										<button class="btn btn-outline-primary" id="sendCommentBtn">
+											<i class="fa-regular fa-paper-plane"></i>
+										</button>
+									</div>
+								</div>
+							</sec:authorize>
+							<ul class="list-group" id="commentListContainer">
+							</ul>
 						</div>
 					</div>
 				</div>
@@ -135,7 +135,7 @@
 			</div>
 		</div>
 	</div>
-	
+
 	<sec:authorize access="isAuthenticated() and authentication.name eq #board.writer">
 		<%-- <sec:authentication property="name" var="userId"/>
 		<c:if test="${userId eq board.writer }"> --%>
@@ -163,6 +163,28 @@
 		</div>
 		<%-- </c:if> --%>
 	</sec:authorize>
+
+	<%-- 댓글 수정 모달 --%>
+	<div class="modal fade" id="commentUpdateModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h1 class="modal-title fs-5">댓글 수정</h1>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
+					<div id="updateCommentContainer">
+						<input type="hidden" id="commentUpdateIdInput" />
+						<textarea class="form-control" id="commentUpdateTextArea"></textarea>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+					<button type="button" class="btn btn-primary" id="updateCommentBtn" data-bs-dismiss="modal">수정</button>
+				</div>
+			</div>
+		</div>
+	</div>
 
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js" integrity="sha512-pumBsjNRGGqkPzKHndZMaAG+bir374sORyzM3uulLV14lN5LyykqNk8eEeUlUkB3U0M4FApyaHraT65ihJhDpQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>

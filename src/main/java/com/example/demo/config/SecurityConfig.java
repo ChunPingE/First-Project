@@ -38,7 +38,7 @@ public class SecurityConfig {
 		 * http.authorizeHttpRequests().requestMatchers("/add") .access(new
 		 * WebExpressionAuthorizationManager("isAuthenticated()"));
 		 * 
-		 * http.authorizeHttpRequests().requestMatchers("/member/signup") .access(new
+		 * http.authorizeHttpRequestsㅛ().requestMatchers("/member/signup") .access(new
 		 * WebExpressionAuthorizationManager("isAnonymous()"));
 		 * 
 		 * http.authorizeHttpRequests().requestMatchers("/**") .access(new

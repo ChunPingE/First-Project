@@ -13,6 +13,8 @@ public class BoardView {
 	private LocalDateTime inserted;
 	private String writer;
 	private List<String> fileName;
+	
 	private Integer fileCount;
 	private Integer likeCount;
+	private Integer commentCount;
 }

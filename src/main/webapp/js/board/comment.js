@@ -44,25 +44,42 @@ function listComment() {
 			// console.log(data);
 			$("#commentListContainer").empty();
 			for (const comment of comments) {
+				const editButtons = `
+					<button 
+						id="commentDeleteBtn${comment.id}" 
+						class="commentDeleteButton btn btn-danger"
+						data-bs-toggle="modal"
+						data-bs-target="#deleteCommentConfirmModal"
+						data-comment-id="${comment.id}">
+							<i class="fa-regular fa-trash-can"></i>
+						</button>
+					<button
+						id="commentUpdateBtn${comment.id}"
+						class="commentUpdateButton btn btn-secondary"
+						data-bs-toggle="modal" data-bs-target="#commentUpdateModal"
+						data-comment-id="${comment.id}">
+							<i class="fa-regular fa-pen-to-square"></i>
+						</button>
+				`;
+
 				// console.log(comment);
 				$("#commentListContainer").append(`
-					<div>
-						<button 
-							id="commentDeleteBtn${comment.id}" 
-							class="commentDeleteButton" 
-							data-comment-id="${comment.id}">삭제</button>
-						:
-						<button
-							id="commentUpdateBtn${comment.id}"
-							class="commentUpdateButton"
-							data-comment-id="${comment.id}">수정</button>
-						: ${comment.content} 
-						: ${comment.memberId} 
-						: ${comment.inserted}
-					</div>
+					<li class="list-group-item d-flex justify-content-between align-items-start">
+						<div class="ms-2 me-auto">
+							<div class="fw-bold"> <i class="fa-regular fa-user"></i> ${comment.memberId}</div>
+							<div style="white-space: pre-wrap;">${comment.content}</div>
+						</div>
+						<div>
+							<span class="badge bg-primary rounded-pill">${comment.inserted}</span>
+							<div class="text-end mt-2">
+								${comment.editable ? editButtons : ''}
+							</div>
+						</div>
+						
+					</li>
 				`);
 			};
-			
+
 			$(".commentUpdateButton").click(function() {
 				const id = $(this).attr("data-comment-id");
 				$.ajax("/comment/id/" + id, {

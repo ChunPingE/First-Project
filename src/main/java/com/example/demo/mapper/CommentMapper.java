@@ -42,5 +42,17 @@ public interface CommentMapper {
 			WHERE id = #{id}
 			""")
 	Integer update(Comment comment);
-	
+
+	@Delete("""
+			DELETE FROM Comment
+			WHERE boardId = #{boardId}
+			""")
+	void deleteByBoardId(Integer boardId);
+
+	@Delete("""
+			DELETE FROM Comment
+			WHERE memberId = #{memberId}
+			""")
+	void removeByMemberId(String memberId);
+
 }

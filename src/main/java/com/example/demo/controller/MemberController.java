@@ -35,7 +35,6 @@ public class MemberController {
 	@PostMapping("signup")
 	@PreAuthorize("isAnonymous()")
 	public String signupProcess(Member member, RedirectAttributes rttr) {
-
 		try {
 			service.signUp(member);
 			rttr.addFlashAttribute("message", "회원가입에 성공했습니다.");
@@ -102,10 +101,9 @@ public class MemberController {
 	@GetMapping("/checkid/{id}")
 	@ResponseBody
 	public Map<String, Object> checkId(@PathVariable("id") String id) {
-
 		return service.checkId(id);
 	}
-
+	
 	@GetMapping("/checkNickName/{nickName}")
 	@ResponseBody
 	public Map<String, Object> checkNickName(@PathVariable("nickName") String nickName, Authentication authentication) {

@@ -20,12 +20,15 @@ public class MemberServiceImpl implements MemberService {
 
 	@Autowired
 	BoardService boardService;
-	
+
 	@Autowired
 	private BoardLikeMapper likeMapper;
 
 	@Autowired
 	private PasswordEncoder passwordEncoder;
+
+	@Autowired
+	private CommentMapper commentMapper;
 
 	@Override
 	public boolean signUp(Member member) {
@@ -62,10 +65,13 @@ public class MemberServiceImpl implements MemberService {
 
 			// 이 회원이 작성한 게시물 row 삭제
 			boardService.removeByWriter(member.getId());
-			
+
 			// 이 회원이 좋아요한 레코드 삭제
 			likeMapper.removeByMemberId(member.getId());
 			
+			// 이 회원이 작성한 댓글 삭제
+			commentMapper.removeByMemberId(member.getId());
+
 			// 회원 테이블 삭제
 			cnt = mapper.deleteById(member.getId());
 		}
@@ -97,7 +103,7 @@ public class MemberServiceImpl implements MemberService {
 		Member member = mapper.selectById(id);
 		return Map.of("available", member == null);
 	}
-
+	
 	@Override
 	public Map<String, Object> checkNickName(String nickName, Authentication authentication) {
 		Member member = mapper.selectByNickName(nickName);
@@ -108,19 +114,19 @@ public class MemberServiceImpl implements MemberService {
 			return Map.of("available", member == null);
 		}
 	}
-	
+
 	public Map<String, Object> checkEmail(String email, Authentication authentication) {
 		Member member = mapper.selectByEmail(email);
-		
+
 		if (authentication != null) {
 			Member checkMember = mapper.selectById(authentication.getName());
-			
+
 			return Map.of("available", member == null || checkMember.getEmail().equals(email));
 		} else {
 			return Map.of("available", member == null);
-			
+
 		}
-		
+
 	}
 
 	/*

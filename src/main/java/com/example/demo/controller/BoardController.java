@@ -49,6 +49,7 @@ public class BoardController {
 		// 1. request param 수집가공
 		// 2. business logic 처리
 		Board board = service.getBoard(id, authentication);
+		System.out.println(board.getFileName());
 
 		// 3. add attribute
 		model.addAttribute("board", board);
@@ -89,7 +90,7 @@ public class BoardController {
 
 	@PostMapping("remove")
 	@PreAuthorize("isAuthenticated() and @customSecurityChecker.checkBoardWriter(authentication, #id)")
-	public String update(Integer id, RedirectAttributes rttr) {
+	public String remove(Integer id, RedirectAttributes rttr) {
 		boolean ok = service.remove(id);
 		if (ok) {
 			rttr.addFlashAttribute("message", id + "번 게시물이 삭제되었습니다.");

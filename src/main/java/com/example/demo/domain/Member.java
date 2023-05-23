@@ -13,4 +13,6 @@ public class Member {
 	private String nickName;
 	private LocalDateTime inserted;
 	private List<String> authority;
+
+	
 }
