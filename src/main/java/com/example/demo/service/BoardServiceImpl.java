@@ -87,7 +87,6 @@ public class BoardServiceImpl implements BoardService {
 	@Override
 	public Board getBoard(Integer id, Authentication authentication) {
 		Board board = mapper.selectById(id);
-		// 현재 로그인하란 사람이 이 게시물에 좋아요 했는지?
 		// 첫번째 글
 		Integer firstBoardId = mapper.selectFirstBoardId();
 		// 마지막글
@@ -105,12 +104,14 @@ public class BoardServiceImpl implements BoardService {
 			board.setNextId(mapper.selectNextId(id));
 		}
 
+		// 현재 로그인하란 사람이 이 게시물에 좋아요 했는지?
 		if (authentication != null) {
 			Like like = likeMapper.select(id, authentication.getName());
 			if (like != null) {
 				board.setLiked(true);
 			}
 		}
+		
 		return board;
 	}
 
